@@ -11201,3 +11201,13 @@ body {
 .footer {
   padding: 5rem 0;
 }
+
+.hover-line:hover hr{
+  transform: scaleX(5);
+  transition: 0.5s;
+}
+
+.hover-line:not(:hover) hr{
+  transform: scaleX(0.2);
+  transition: 0.5s;
+}
