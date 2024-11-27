@@ -11211,3 +11211,47 @@ body {
   transform: scaleX(0.2);
   transition: 0.5s;
 }
+
+/* Hover effect on clickable badges */
+.clickable-badge {
+  cursor: pointer;
+}
+
+.clickable-badge:hover {
+  background-color: #0056b3; /* Darker blue when hovered */
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover effect on the "X" button */
+.badge-close {
+  cursor: pointer;
+  font-size: 1.2em;
+  padding-left: 8px;
+}
+
+.badge-close:hover {
+  color: #dc3545; /* Red color when hovered */
+}
+
+/* Add vibrant custom colors on top of Bootstrap's default colors */
+.bg-pink { background-color: #e83e8c !important; } /* Pink */
+.bg-orange { background-color: #fd7e14 !important; } /* Orange */
+.bg-teal { background-color: #20c997 !important; }  /* Teal */
+.bg-purple { background-color: #6f42c1 !important; } /* Purple */
+
+/* Optional: Enhance hover effect to be more consistent */
+.badge {
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.badge:hover {
+  transform: scale(1.1); /* Slightly enlarge the badge on hover */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  opacity: 0.9; /* Make it a bit transparent on hover */
+}
+
+/* For badges with light text color */
+.text-white {
+    color: white;
+}
