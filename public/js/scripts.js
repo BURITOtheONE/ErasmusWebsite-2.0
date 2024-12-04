@@ -84,3 +84,30 @@ if (locationTrigger) {
         window.open(mapsUrl, '_blank', 'noopener,noreferrer');
     });
 }
+
+// app.js
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const path = require('path');
+const adminRoutes = require('./routes/admin');
+const app = express();
+
+// Connect to MongoDB
+mongoose.connect('mongodb://localhost:27017/ppmg_erasmus', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
+
+// Middleware
+app.use(bodyParser.urlencoded({ extended: true }));
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// Routes
+app.use(adminRoutes);
+
+// Start the server
+app.listen(3000, () => {
+    console.log('Server started on port 3000');
+});

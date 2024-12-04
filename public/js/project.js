@@ -49,23 +49,28 @@ function renderActiveFilters() {
 
     Object.keys(activeFilters).forEach((filterType) => {
         if (activeFilters[filterType]) {
+            const badgeColor = BADGE_COLORS[filterType] || 'bg-secondary'; // Get the correct badge color
+
             const badge = document.createElement('span');
-            badge.className = `badge me-2 mb-2 clickable-badge ${BADGE_COLORS[filterType]}`;
+            badge.className = `badge me-2 mb-2 clickable-badge ${badgeColor} text-white`;
             badge.textContent = activeFilters[filterType];
             badge.setAttribute('data-filter-type', filterType);
             badge.setAttribute('data-filter-value', activeFilters[filterType]);
 
             const closeButton = document.createElement('span');
-            closeButton.className = 'badge-close text-white ms-2';
+            closeButton.className = 'badge-close ms-2';
             closeButton.innerHTML = '&times;';
-            closeButton.style.cursor = 'pointer';  // Ensures cursor pointer for the close button
+            closeButton.style.cursor = 'pointer'; // Cursor for the close button
+            closeButton.style.color = 'white'; // Ensure the "x" stays visible
+
             closeButton.onclick = () => {
                 activeFilters[filterType] = null;
                 updateProjects();
                 renderActiveFilters();
             };
 
-            badge.onclick = () => {  // Make the whole badge clickable
+            // Make the whole badge clickable
+            badge.onclick = () => {
                 activeFilters[filterType] = null;
                 updateProjects();
                 renderActiveFilters();

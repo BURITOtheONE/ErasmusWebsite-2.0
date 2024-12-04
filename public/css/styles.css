@@ -11239,6 +11239,8 @@ body {
 .bg-orange { background-color: #fd7e14 !important; } /* Orange */
 .bg-teal { background-color: #20c997 !important; }  /* Teal */
 .bg-purple { background-color: #6f42c1 !important; } /* Purple */
+.bg-gray { background-color: rgb(240,240,240) !important; } /* Purple */
+.bg-darkgray {background-color: #2c3034 !important;}
 
 /* Optional: Enhance hover effect to be more consistent */
 .badge {
