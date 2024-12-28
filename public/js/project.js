@@ -93,38 +93,38 @@ function renderProjects(filteredProjects) {
         colDiv.className = 'col-lg-4 col-md-6 mb-4';
 
         const cardDiv = document.createElement('div');
-        cardDiv.className = 'card h-100 shadow-sm';
+        cardDiv.className = 'card h-100 shadow-sm border-0';
 
         const cardImg = document.createElement('img');
-        cardImg.className = 'card-img-top';
-        cardImg.src = 'https://via.placeholder.com/300x150';
+        cardImg.className = 'card-img-top rounded';
+        cardImg.src = project.image || 'https://via.placeholder.com/300x150'; // Use project image or placeholder
         cardImg.alt = `${project.title} image`;
 
         const cardBody = document.createElement('div');
         cardBody.className = 'card-body';
 
         const title = document.createElement('h5');
-        title.className = 'card-title';
+        title.className = 'card-title text-primary fw-bold';
         title.textContent = project.title;
 
         const subtitle = document.createElement('h6');
         subtitle.className = 'card-subtitle mb-2 text-muted';
-        subtitle.textContent = project.year;
+        subtitle.textContent = `Year: ${project.year}`;
 
         const description = document.createElement('p');
-        description.className = 'card-text';
+        description.className = 'card-text text-truncate';
         description.textContent = project.description;
 
         // Create badges based on tags
         const badgeContainer = document.createElement('div');
-        badgeContainer.className = 'mb-2';
+        badgeContainer.className = 'mb-3';
 
-        project.tags.forEach(tag => {
-            const badgeColor = BADGE_COLORS[tag] || 'bg-secondary';  // Default to grey if no match
+        project.tags.forEach((tag) => {
+            const badgeColor = BADGE_COLORS[tag] || 'bg-secondary'; // Default to grey if no match
 
             const tagBadge = document.createElement('span');
             tagBadge.className = `badge me-1 clickable-badge ${badgeColor}`;
-            tagBadge.textContent = tag;  // Badge text will be the tag name
+            tagBadge.textContent = tag; // Badge text will be the tag name
             tagBadge.onclick = () => {
                 activeFilters[tag] = tag;
                 updateProjects();
@@ -133,15 +133,27 @@ function renderProjects(filteredProjects) {
             badgeContainer.appendChild(tagBadge);
         });
 
+        // Add View Project button
+        const viewButton = document.createElement('a');
+        viewButton.href = `/projects/${project._id}`; // Adjust URL to fit your routing logic
+        viewButton.className = 'btn btn-outline-primary btn-sm';
+        viewButton.textContent = 'View Project';
+
+        // Append elements to card body
         cardBody.appendChild(title);
         cardBody.appendChild(subtitle);
         cardBody.appendChild(description);
         cardBody.appendChild(badgeContainer);
+        cardBody.appendChild(viewButton);
 
+        // Append card body and image to card
         cardDiv.appendChild(cardImg);
         cardDiv.appendChild(cardBody);
 
+        // Append card to column
         colDiv.appendChild(cardDiv);
+
+        // Append column to container
         projectsContainer.appendChild(colDiv);
     });
 }

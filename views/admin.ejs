@@ -1,4 +1,3 @@
-<!-- admin.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +6,7 @@
     <meta name="description" content="Admin Page - Manage Projects and News">
     <meta name="author" content="PPMG 'akad. Ivan Tsenov'">
     <title>Admin Panel</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 </head>
@@ -35,15 +35,29 @@
 
         <!-- Form to Edit Titles -->
         <section class="mb-5">
-            <h2>Edit Project Titles</h2>
-            <form id="editForm">
+            <h2>Manage Projects</h2>
+        
+            <!-- Form to Add/Update Projects -->
+            <form id="projectForm">
                 <div class="mb-3">
-                    <label for="projectTitle" class="form-label">Project Title</label>
-                    <input type="text" class="form-control" id="projectTitle" placeholder="Enter new project title">
+                    <label for="projectTitle" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="projectTitle" placeholder="Project Title" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Save Title</button>
+                <div class="mb-3">
+                    <label for="projectDescription" class="form-label">Description</label>
+                    <textarea class="form-control" id="projectDescription" rows="3" placeholder="Project Description" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="projectYear" class="form-label">Year</label>
+                    <input type="number" class="form-control" id="projectYear" placeholder="Year" required>
+                </div>
+                <button type="submit" class="btn btn-success">Save Project</button>
             </form>
-        </section>
+        
+            <!-- Projects List -->
+            <div id="adminProjects" class="mt-5">
+            </div>
+        </section>        
 
         <!-- Add News Section -->
         <section>

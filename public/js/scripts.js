@@ -9,19 +9,26 @@
 
 window.addEventListener('DOMContentLoaded', event => {
 
-    // Navbar shrink function
-    var navbarShrink = function () {
-        const navbarCollapsible = document.body.querySelector('#mainNav');
-        if (!navbarCollapsible) {
-            return;
-        }
-        if (window.scrollY === 0) {
-            navbarCollapsible.classList.remove('navbar-shrink')
-        } else {
-            navbarCollapsible.classList.add('navbar-shrink')
-        }
+// Navbar shrink function
+var navbarShrink = function () {
+    const navbarCollapsible = document.body.querySelector('#mainNav');
+    const activeLink = document.querySelector('.nav-link-active');
 
-    };
+    if (!navbarCollapsible || !activeLink) {
+        return;
+    }
+
+    if (window.scrollY === 0) {
+        navbarCollapsible.classList.remove('navbar-shrink');
+        activeLink.classList.add('link-light'); // Add Bootstrap's blue link color
+        activeLink.classList.remove('link-primary'); // Remove gray link color
+    } else {
+        navbarCollapsible.classList.add('navbar-shrink');
+        activeLink.classList.add('link-primary'); // Add Bootstrap's blue link color
+        activeLink.classList.remove('link-light'); // Remove gray link color
+    }
+};
+
 
     // Shrink the navbar 
     navbarShrink();

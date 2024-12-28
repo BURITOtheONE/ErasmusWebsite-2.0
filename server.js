@@ -71,6 +71,11 @@ app.get('/contact', (req, res) => {
   res.render('contact');  // Renders contact.ejs
 });
 
+// Route for Admin page
+app.get('/admin', (req, res) => {
+  res.render('admin');  // Renders contact.ejs
+});
+
 // Route to render the projects page (EJS view)
 app.get('/project', async (req, res) => {
   try {
