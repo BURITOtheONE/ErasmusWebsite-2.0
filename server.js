@@ -15,7 +15,7 @@ app.use(express.static('public')); // Serve static files (like your JS, CSS, etc
 app.use(express.static(path.join(__dirname, 'public')));
 
 // MongoDB Connection
-mongoose.connect('mongodb://localhost:27017/erasmus', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://127.0.0.1:27017/erasmus', { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("Connected to MongoDB"))
   .catch(err => console.log("Failed to connect to MongoDB", err));
 
