@@ -1,4 +1,4 @@
-// Badge color constants using Bootstrap colors and a couple of extra vibrant colors
+// Badge color constants using Bootstrap colors and custom vibrant colors
 const BADGE_COLORS = {
     "Education": "bg-primary",      // Blue
     "Sustainability": "bg-success", // Green
@@ -13,27 +13,6 @@ const BADGE_COLORS = {
     "Global": "bg-teal"             // Teal (custom)
 };
 
-// Expanded Erasmus projects data with more titles
-const projects = [
-    { title: "Digital Skills for Future", year: 2024, description: "Improving digital literacy for students and teachers.", tags: ["Education", "Innovation"] },
-    { title: "Green Europe Initiative", year: 2025, description: "Promoting sustainable development and green practices.", tags: ["Sustainability", "Environment"] },
-    { title: "Cultural Heritage Exchange", year: 2026, description: "Exploring cultural diversity and preserving traditions.", tags: ["Culture", "Sustainability"] },
-    { title: "STEM Innovators", year: 2027, description: "Encouraging innovation in science, technology, engineering, and mathematics.", tags: ["Education", "Innovation"] },
-    { title: "Youth Leadership Program", year: 2024, description: "Empowering young leaders through mentorship and training.", tags: ["Leadership", "Youth"] },
-    { title: "Tech for Good", year: 2025, description: "Leveraging technology to solve social and environmental issues.", tags: ["Technology", "Social Impact"] },
-    { title: "Healthy Living Campaign", year: 2024, description: "Promoting healthy lifestyles and wellness among communities.", tags: ["Health", "Wellness"] },
-    { title: "Art for All", year: 2026, description: "Fostering creativity and access to art for everyone.", tags: ["Culture", "Art"] },
-    { title: "Women in Science", year: 2025, description: "Encouraging young women to pursue careers in science and technology.", tags: ["Gender", "Technology"] },
-    { title: "Future Cities Project", year: 2027, description: "Designing sustainable and smart urban solutions for the future.", tags: ["Innovation", "Urban"] },
-    { title: "AI for Education", year: 2026, description: "Leveraging artificial intelligence to enhance learning experiences.", tags: ["Technology", "Education"] },
-    { title: "Innovation for Climate Change", year: 2027, description: "Developing solutions for climate change through technological innovation.", tags: ["Innovation", "Environment"] },
-    { title: "Digital Nomads Program", year: 2025, description: "Helping youth embrace remote work and digital nomad lifestyles.", tags: ["Technology", "Youth"] },
-    { title: "AI in Healthcare", year: 2026, description: "Using AI to enhance healthcare services and patient care.", tags: ["Technology", "Health"] },
-    { title: "Global Citizens Initiative", year: 2024, description: "Promoting global citizenship and awareness among young people.", tags: ["Culture", "Social Impact"] },
-    { title: "Future of Education", year: 2027, description: "Innovating new educational models for the future of learning.", tags: ["Education", "Innovation"] },
-    { title: "Youth in Politics", year: 2024, description: "Encouraging youth participation in politics and governance.", tags: ["Youth", "Political Engagement"] }
-];
-
 // DOM Elements
 const projectsContainer = document.getElementById('projectsContainer');
 const searchInput = document.getElementById('searchInput');
@@ -42,6 +21,20 @@ const activeFiltersContainer = document.getElementById('activeFilters');
 
 // Active filters object
 let activeFilters = {};
+let projects = []; // To store projects fetched from the server
+
+async function fetchProjects() {
+    try {
+        const response = await fetch('/api/projects'); // Replace with your actual endpoint
+        const data = await response.json(); // Parse the JSON response
+        renderProjects(data); // Render the fetched projects
+    } catch (error) {
+        console.error('Error fetching projects:', error);
+    }
+}
+
+// Call fetchProjects() to load the data initially
+fetchProjects();
 
 // Function to render active filter tags
 function renderActiveFilters() {
@@ -97,7 +90,7 @@ function renderProjects(filteredProjects) {
 
         const cardImg = document.createElement('img');
         cardImg.className = 'card-img-top rounded';
-        cardImg.src = project.image || 'https://via.placeholder.com/300x150'; // Use project image or placeholder
+        cardImg.src = project.imageUrl || 'https://via.placeholder.com/300x150'; // Use project image or placeholder
         cardImg.alt = `${project.title} image`;
 
         const cardBody = document.createElement('div');
@@ -191,5 +184,5 @@ function updateProjects() {
 searchInput.addEventListener('input', updateProjects);
 sortOption.addEventListener('change', updateProjects);
 
-// Initial render
-updateProjects();
+// Fetch and render projects on load
+fetchProjects();

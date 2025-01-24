@@ -11257,3 +11257,28 @@ body {
 .text-white {
     color: white;
 }
+
+.my-super {
+  margin-top: 5rem !important;
+  margin-bottom: 5rem !important;
+
+  @media (min-width: 576px) { /* Small devices (landscape phones, 576px and up) */
+    margin-top: 6rem !important;
+    margin-bottom: 6rem !important;
+  }
+
+  @media (min-width: 768px) { /* Medium devices (tablets, 768px and up) */
+    margin-top: 5rem !important;
+    margin-bottom: 5rem !important;
+  }
+
+  @media (min-width: 992px) { /* Large devices (desktops, 992px and up) */
+    margin-top: 4rem !important;
+    margin-bottom: 4rem !important;
+  }
+
+  @media (min-width: 1200px) { /* Extra large devices (large desktops, 1200px and up) */
+    margin-top: 8rem !important;
+    margin-bottom: 8rem !important;
+  }
+}
