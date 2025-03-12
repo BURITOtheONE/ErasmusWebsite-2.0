@@ -15,10 +15,17 @@ const morgan = require('morgan');
 const bcrypt = require('bcrypt');
 const app = express();
 
+// Ensure uploads directory exists
+const fs = require('fs');
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
 // Configure multer storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, 'uploads')); // Save files in the 'uploads' directory
+    cb(null, uploadsDir); // Save files in the 'uploads' directory
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -52,18 +59,26 @@ app.use(
       mongoUrl: process.env.MONGO_URI, // MongoDB URI
     }),
     cookie: {
-      secure: false, // Under Production
+      secure: process.env.NODE_ENV === 'production', // Only secure in production
       maxAge: 1000 * 60 * 60 * 24, // 1 day
     },
   })
 );
 
 // Middleware
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+      "img-src": ["'self'", "data:", "https://via.placeholder.com"]
+    }
+  }
+}));
 app.use(morgan('combined'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: '1d' }));
+app.use('/uploads', express.static(uploadsDir)); // Serve uploaded files
 app.set('view engine', 'ejs');
 
 // Rate Limiting
@@ -78,11 +93,28 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("Connected to MongoDB"))
   .catch(err => console.error("Failed to connect to MongoDB", err));
 
+
 // API to fetch projects
 app.get('/api/projects', async (req, res) => {
   try {
-    const projects = await Project.find(); // Fetch all projects from the database
-    res.json(projects); // Send the projects as JSON
+    const projects = await Project.find().sort({ createdAt: -1 }); // Fetch all projects from the database
+    
+    // Process each project to ensure tags are in the right format
+    const processedProjects = projects.map(project => {
+      // Convert project to a regular object
+      const projectObj = project.toObject();
+      
+      // Ensure tags is always an array
+      if (typeof projectObj.tags === 'string') {
+        projectObj.tags = projectObj.tags.split(/[\s,]+/).filter(Boolean);
+      } else if (!Array.isArray(projectObj.tags)) {
+        projectObj.tags = [];
+      }
+      
+      return projectObj;
+    });
+    
+    res.json(processedProjects); // Send the processed projects as JSON
   } catch (error) {
     console.error('Error fetching projects:', error.message);
     res.status(500).json({ error: 'Failed to fetch projects' });
@@ -97,9 +129,9 @@ app.get('/admin', (req, res) => {
   console.log('Session User ID:', req.session.userId); // Log session info
 
   if (req.session.userId) {
-    res.render('admin'); // Renders Admin Panel
+    res.render('admin', { user: req.session.userId }); // Renders Admin Panel
   } else {
-    res.render('adminlogin'); // Redirects to login if not authenticated
+    res.render('adminlogin', { error: null }); // Pass null error to template
   }
 });
 
@@ -114,24 +146,26 @@ app.get('/adminregister', (req, res) => {
 
 // Route for Admin Registration (POST)
 app.post('/register-admin', async (req, res) => {
-  const { fullName, email, username, password, confirmPassword } = req.body;
+  try {
+    const { fullName, email, username, password, confirmPassword } = req.body;
 
-  // Validate inputs
-  if (password !== confirmPassword) {
-    return res.status(400).send("Passwords do not match.");
-  }
-
-  // Check if email or username already exists
-  const existingAdmin = await Admin.findOne({ $or: [{ email }, { username }] });
-  if (existingAdmin) {
-    return res.status(400).send("Email or Username already exists.");
-  }
-
-  // Hash the password
-  bcrypt.hash(password, 10, async (err, hashedPassword) => {
-    if (err) {
-      return res.status(500).send("Error hashing password");
+    // Validate inputs
+    if (!fullName || !email || !username || !password) {
+      return res.status(400).send("All fields are required.");
     }
+    
+    if (password !== confirmPassword) {
+      return res.status(400).send("Passwords do not match.");
+    }
+
+    // Check if email or username already exists
+    const existingAdmin = await Admin.findOne({ $or: [{ email }, { username }] });
+    if (existingAdmin) {
+      return res.status(400).send("Email or Username already exists.");
+    }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Save the new admin to the database
     const newAdmin = new Admin({
@@ -141,96 +175,145 @@ app.post('/register-admin', async (req, res) => {
       password: hashedPassword,
     });
 
-    try {
-      await newAdmin.save();
-      res.send("Admin created successfully.");
-    } catch (err) {
-      res.status(500).send("Error saving admin.");
-    }
-  });
+    await newAdmin.save();
+    res.redirect('/admin'); // Redirect to login page after successful registration
+  } catch (err) {
+    console.error('Registration error:', err);
+    res.status(500).send("Error creating admin: " + err.message);
+  }
 });
 
 // Handle Admin Login
 app.post('/adminlogin', async (req, res) => {
   const { username, password } = req.body;
-  console.log('Login attempt:', { username, password }); // Log credentials from the form
+  
+  if (!username || !password) {
+    return res.status(400).render('adminlogin', { error: 'Username and password are required' });
+  }
 
   try {
-    const admin = await Admin.loginAdmin(username, password);
-    console.log('Login successful:', admin); // Log the returned admin object
-    req.session.userId = admin._id; // Store the admin's ID in the session
+    // Check if Admin model has loginAdmin method
+    if (typeof Admin.loginAdmin !== 'function') {
+      // Manual login implementation if method doesn't exist
+      const admin = await Admin.findOne({ username });
+      
+      if (!admin) {
+        return res.status(400).render('adminlogin', { error: 'Invalid username or password' });
+      }
+      
+      const isMatch = await bcrypt.compare(password, admin.password);
+      
+      if (!isMatch) {
+        return res.status(400).render('adminlogin', { error: 'Invalid username or password' });
+      }
+      
+      req.session.userId = admin._id;
+    } else {
+      // Use the model's login method if it exists
+      const admin = await Admin.loginAdmin(username, password);
+      req.session.userId = admin._id;
+    }
 
-    // Save session explicitly
+    // Save session and redirect
     req.session.save((err) => {
       if (err) {
         console.error('Error saving session:', err);
-        return res.status(500).send('Failed to save session.');
+        return res.status(500).render('adminlogin', { error: 'Failed to save session' });
       }
-      console.log('Session saved:', req.session.userId); // Debug log
-      res.redirect('/admin'); // Redirect to the admin panel
+      res.redirect('/admin');
     });
-    
   } catch (error) {
-    console.error('Login error:', error.message); // Log the error for debugging
-    res.status(400).render('adminlogin', { error: error.message });
+    console.error('Login error:', error.message);
+    res.status(400).render('adminlogin', { error: error.message || 'Login failed' });
   }
 });
 
 // Handle Project Upload
 app.post('/admin/project', upload.single('projectImage'), async (req, res) => {
   try {
-    // Debugging: Log req.body and req.file
-    console.log('Request body:', req.body);
-    console.log('Uploaded file:', req.file);
-
     const { title, description, creators, websiteLink, tags, year } = req.body;
     const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
 
     // Ensure all required fields are present
-    if (!title || !description || !creators || !year || !imageUrl) {
-      throw new Error('All required fields must be filled');
+    if (!title || !description || !year) {
+      throw new Error('Title, description, and year are required fields');
     }
 
-    // Convert tags (array or space-separated string) into a single string
-    const tagsString = Array.isArray(tags) ? tags.join(' ') : tags;
+    // Process tags to ensure they're stored as an array
+    let tagsArray = [];
+    if (tags) {
+      if (Array.isArray(tags)) {
+        tagsArray = tags;
+      } else if (typeof tags === 'string') {
+        tagsArray = tags.split(/[\s,]+/).filter(Boolean);
+      }
+    }
+
+    // Process creators to ensure they're stored as an array
+    let creatorsArray = [];
+    if (creators) {
+      if (Array.isArray(creators)) {
+        creatorsArray = creators;
+      } else if (typeof creators === 'string') {
+        creatorsArray = creators.split(/[\s,]+/).filter(Boolean);
+      }
+    }
 
     const newProject = new Project({
       title,
       description,
-      creators: creators ? creators.split(' ') : [],
+      creators: creatorsArray,
       websiteLink: websiteLink || null, // Optional field
-      tags: tagsString, // Save tags as a single concatenated string
-      year,
+      tags: tagsArray,
+      year: parseInt(year, 10) || new Date().getFullYear(),
       imageUrl,
+      createdAt: new Date()
     });
 
     await newProject.save();
     res.redirect('/admin'); // Redirect to admin panel or success page
   } catch (error) {
-    console.error('Error saving project:', error.message); // Log error details
+    console.error('Error saving project:', error);
     res.status(400).send('Error saving project: ' + error.message);
   }
 });
 
 // Handle News Upload
 app.post('/admin/news', upload.single('newsImage'), async (req, res) => {
-  const { title, content, category, date } = req.body;
-  const imageUrl = req.file ? `/uploads/${req.file.filename}` : null; // Get image path
-
   try {
-      const newNews = new News({
-          title,
-          content,
-          imageUrl, // Save image path in DB
-          category,
-          date,
-      });
+    const { title, content, category, date } = req.body;
+    const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
 
-      await newNews.save();
-      res.redirect('/admin'); // Redirect to admin panel or success page
+    // Validate required fields
+    if (!title || !content) {
+      throw new Error('Title and content are required');
+    }
+
+    const newNews = new News({
+      title,
+      content,
+      imageUrl,
+      category: category || 'Uncategorized',
+      date: date ? new Date(date) : new Date(),
+    });
+
+    await newNews.save();
+    res.redirect('/admin');
   } catch (error) {
-      res.status(400).send('Error saving news: ' + error.message);
+    console.error('Error saving news:', error);
+    res.status(400).send('Error saving news: ' + error.message);
   }
+});
+
+// Logout route
+app.get('/admin/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Error destroying session:', err);
+      return res.status(500).send('Error logging out');
+    }
+    res.redirect('/admin');
+  });
 });
 
 app.get('/check-session', (req, res) => {
@@ -242,20 +325,38 @@ app.get('/check-session', (req, res) => {
 });
 
 // Route to load projects
-app.get('/project', async (req, res) => {
+app.get('/projects', async (req, res) => {
   try {
-    const projects = await Project.find(); // Fetch all projects
-    res.render('project', { projects }); // Render to a template named "projects"
+    const projects = await Project.find().sort({ createdAt: -1 });
+    res.render('projects', { projects }); // Render to a template named "projects"
   } catch (error) {
     console.error('Error fetching projects:', error.message);
     res.status(500).send('Error fetching projects');
   }
 });
 
-// Error Handling
+// Get individual project
+app.get('/projects/:id', async (req, res) => {
+  try {
+    const project = await Project.findById(req.params.id);
+    if (!project) {
+      return res.status(404).send('Project not found');
+    }
+    res.render('project-detail', { project });
+  } catch (error) {
+    console.error('Error fetching project:', error.message);
+    res.status(500).send('Error fetching project');
+  }
+});
+
+// Error Handling Middleware
+app.use((req, res, next) => {
+  res.status(404).send('Page not found');
+});
+
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(err.status || 500).json({ error: 'Internal Server Error' });
+  res.status(err.status || 500).send('Internal Server Error');
 });
 
 // Start Server
