@@ -239,16 +239,6 @@ app.post('/admin/project', upload.single('projectImage'), async (req, res) => {
       throw new Error('Title, description, and year are required fields');
     }
 
-    // Process tags to ensure they're stored as an array
-    let tagsArray = [];
-    if (tags) {
-      if (Array.isArray(tags)) {
-        tagsArray = tags;
-      } else if (typeof tags === 'string') {
-        tagsArray = tags.split(/[\s,]+/).filter(Boolean);
-      }
-    }
-
     // Process creators to ensure they're stored as an array
     let creatorsArray = [];
     if (creators) {
@@ -264,7 +254,7 @@ app.post('/admin/project', upload.single('projectImage'), async (req, res) => {
       description,
       creators: creatorsArray,
       websiteLink: websiteLink || null, // Optional field
-      tags: tagsArray,
+      tags: tags || null, // Optional field
       year: parseInt(year, 10) || new Date().getFullYear(),
       imageUrl,
       createdAt: new Date()

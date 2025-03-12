@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             const viewButton = document.createElement('a');
-            viewButton.href = `/projects/${project._id}`;
+            viewButton.href = `${project.websiteLink}`;
             viewButton.className = 'btn btn-outline-primary btn-sm';
             viewButton.textContent = 'View Project';
 

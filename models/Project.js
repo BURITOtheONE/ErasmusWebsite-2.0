@@ -37,9 +37,6 @@ const projectSchema = new mongoose.Schema({
     },
 });
 
-// Create a multi-key index for the tags field
-projectSchema.index({ tags: 1 });
-
 // Create Project Model
 const Project = mongoose.model('Project', projectSchema);
 module.exports = Project;
