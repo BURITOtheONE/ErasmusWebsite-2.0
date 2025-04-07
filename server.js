@@ -49,18 +49,21 @@ const upload = multer({
   },
 });
 
-// Session Configuration
+// Session Configuration - UPDATED VERSION
 app.use(
   session({
     secret: process.env.SESSION_SECRET || 'yourSecretKey',
-    resave: false,
-    saveUninitialized: false,
+    resave: true,
+    saveUninitialized: true,
     store: MongoStore.create({
-      mongoUrl: process.env.MONGO_URI, // MongoDB URI
+      mongoUrl: process.env.MONGO_URI,
+      touchAfter: 24 * 3600
     }),
     cookie: {
-      secure: process.env.NODE_ENV === 'production', // Only secure in production
-      maxAge: 1000 * 60 * 60 * 24, // 1 day
+      secure: false, // Change to false for local testing
+      maxAge: 1000 * 60 * 60 * 24,
+      httpOnly: true,
+      sameSite: 'lax'
     },
   })
 );
@@ -79,6 +82,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: '1d' }));
 app.use('/uploads', express.static(uploadsDir)); // Serve uploaded files
+
+// Add route to serve Bootstrap files
+app.use('/js', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js')));
+app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')));
+
 app.set('view engine', 'ejs');
 
 // Trust reverse proxies like Render's load balancers
@@ -128,8 +136,10 @@ app.get('/', (req, res) => res.render('index'));
 app.get('/about', (req, res) => res.render('about'));
 app.get('/contact', (req, res) => res.render('contact'));
 
+// Updated admin route with better logging
 app.get('/admin', (req, res) => {
-  console.log('Session User ID:', req.session.userId); // Log session info
+  console.log('Session data:', req.session);
+  console.log('Session User ID:', req.session.userId);
 
   if (req.session.userId) {
     res.render('admin', { user: req.session.userId }); // Renders Admin Panel
@@ -186,48 +196,44 @@ app.post('/register-admin', async (req, res) => {
   }
 });
 
-// Handle Admin Login
+// Handle Admin Login - FIXED VERSION
 app.post('/adminlogin', async (req, res) => {
   const { username, password } = req.body;
   
   if (!username || !password) {
-    return res.status(400).render('adminlogin', { error: 'Username and password are required' });
+    return res.render('adminlogin', { error: 'Username and password are required' });
   }
 
   try {
-    // Check if Admin model has loginAdmin method
-    if (typeof Admin.loginAdmin !== 'function') {
-      // Manual login implementation if method doesn't exist
-      const admin = await Admin.findOne({ username });
-      
-      if (!admin) {
-        return res.status(400).render('adminlogin', { error: 'Invalid username or password' });
-      }
-      
-      const isMatch = await bcrypt.compare(password, admin.password);
-      
-      if (!isMatch) {
-        return res.status(400).render('adminlogin', { error: 'Invalid username or password' });
-      }
-      
-      req.session.userId = admin._id;
-    } else {
-      // Use the model's login method if it exists
-      const admin = await Admin.loginAdmin(username, password);
-      req.session.userId = admin._id;
+    // Find the admin by username
+    const admin = await Admin.findOne({ username });
+    
+    if (!admin) {
+      return res.render('adminlogin', { error: 'Invalid username or password' });
     }
-
-    // Save session and redirect
+    
+    // Compare passwords
+    const isMatch = await bcrypt.compare(password, admin.password);
+    
+    if (!isMatch) {
+      return res.render('adminlogin', { error: 'Invalid username or password' });
+    }
+    
+    // Set session userId
+    req.session.userId = admin._id.toString(); // Convert ObjectId to string
+    
+    // Force session save before redirect
     req.session.save((err) => {
       if (err) {
         console.error('Error saving session:', err);
-        return res.status(500).render('adminlogin', { error: 'Failed to save session' });
+        return res.render('adminlogin', { error: 'Failed to save session' });
       }
-      res.redirect('/admin');
+      console.log('Session saved successfully, userId:', req.session.userId);
+      return res.redirect('/admin');
     });
   } catch (error) {
     console.error('Login error:', error.message);
-    res.status(400).render('adminlogin', { error: error.message || 'Login failed' });
+    res.render('adminlogin', { error: error.message || 'Login failed' });
   }
 });
 
