@@ -52,7 +52,7 @@ const upload = multer({
 // Session Configuration - UPDATED VERSION
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || 'yourSecretKey',
+    secret: process.env.SESSION_SECRET || ' ',
     resave: true,
     saveUninitialized: true,
     store: MongoStore.create({
