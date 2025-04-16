@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Erasmus+ Activities</title>
+  <link href="public/bootstrap/js/bootstrap.bundle.min.js" rel="stylesheet" />
+  <link href="public/bootstrap/css/bootstrap.css" rel="stylesheet" />
+  <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+  <!-- Navbar loaded via JavaScript -->
+  <div id="navbar-container"></div>
+
+  <!-- Page Title -->
+  <section class="container text-center mt-5">
+    <h1 class="section-title">Our Activities</h1>
+    <p class="mb-4">Explore the various activities we've participated in as part of the Erasmus+ program.</p>
+  </section>
+
+  <!-- Activities Grid -->
+  <section class="container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4">
+      <!-- Card Example -->
+      <div class="col">
+        <div class="card h-100 shadow-sm">
+          <img src="https://via.placeholder.com/300x180" class="card-img-top" alt="Activity 1" />
+          <div class="card-body">
+            <h5 class="card-title">Cultural Exchange</h5>
+            <p class="card-text">Students shared traditions and customs in Germany.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card h-100 shadow-sm">
+          <img src="https://via.placeholder.com/300x180" class="card-img-top" alt="Activity 2" />
+          <div class="card-body">
+            <h5 class="card-title">Sustainability Workshop</h5>
+            <p class="card-text">Eco-friendly practices discussed in Poland with partners.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card h-100 shadow-sm">
+          <img src="https://via.placeholder.com/300x180" class="card-img-top" alt="Activity 3" />
+          <div class="card-body">
+            <h5 class="card-title">Digital Skills Session</h5>
+            <p class="card-text">Introduction to programming and robotics in Spain.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add more cards here manually -->
+    </div>
+  </section>
+    <script>
+        window.onload = function () {
+            fetch('navbar.html')
+            .then(response => {
+                if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('navbar-container').innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error loading navbar:', error);
+            });
+        };
+
+        document.addEventListener("DOMContentLoaded", function () {
+        const navLinks = document.querySelectorAll(".nav-link");
+        const navbarCollapse = document.querySelector(".navbar-collapse");
+
+        navLinks.forEach(link => {
+            link.addEventListener("click", () => {
+            if (navbarCollapse.classList.contains("show")) {
+                new bootstrap.Collapse(navbarCollapse).toggle();
+            }
+            });
+        });
+        });
+    </script>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2025 Erasmus+ Projects | All rights reserved</p>
+  </footer>
+</body>
+</html>
