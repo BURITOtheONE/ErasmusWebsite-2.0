@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 closeButton.style.color = 'white'; // Ensure the "x" stays visible
 
                 closeButton.onclick = (e) => {
-                    e.stopPropagation(); // Prevent badge click from triggering
+                    e.stopPropagation();
                     activeFilters[filterType] = null;
                     updateProjects();
                     renderActiveFilters();
@@ -105,6 +105,11 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // Check if user is admin by looking for a data attribute on the projects container
+        // Also check URL path as a backup method
+        const isAdmin = projectsContainer.dataset.isAdmin === 'true' || window.location.pathname.includes('/admin');
+        console.log("Admin status:", isAdmin, "Container dataset:", projectsContainer.dataset);
+
         filteredProjects.forEach((project) => {
             console.log("Rendering project:", project.title);
 
@@ -118,7 +123,51 @@ document.addEventListener('DOMContentLoaded', () => {
             colDiv.className = 'col-lg-4 col-md-6 mb-4';
 
             const cardDiv = document.createElement('div');
-            cardDiv.className = 'card h-100 shadow-sm rounded-4 border-0';
+            cardDiv.className = 'card h-100 shadow-sm rounded-4 border-0 position-relative';
+
+            // Add delete button for admins
+            if (isAdmin) {
+                console.log("Adding delete button for project:", project.title);
+                
+                const deleteButton = document.createElement('button');
+                deleteButton.className = 'btn btn-danger btn-sm position-absolute end-0 top-0 m-2';
+                deleteButton.innerHTML = '🗑️'; // Fallback emoji
+                deleteButton.style.zIndex = '10'; // Ensure button is above other elements
+                deleteButton.setAttribute('data-project-id', project._id);
+                
+                // Add click event for delete
+                deleteButton.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    if (confirm('Are you sure you want to delete this project?')) {
+                        try {
+                            const response = await fetch(`/api/projects/${project._id}`, {
+                                method: 'DELETE'
+                            });
+                            
+                            if (response.ok) {
+                                // Remove the project card from the DOM
+                                colDiv.remove();
+                                // Also remove from projects array
+                                const index = projects.findIndex(p => p._id === project._id);
+                                if (index !== -1) {
+                                    projects.splice(index, 1);
+                                }
+                                alert('Project deleted successfully');
+                            } else {
+                                const error = await response.text();
+                                alert(`Failed to delete project: ${error}`);
+                            }
+                        } catch (error) {
+                            console.error('Error deleting project:', error);
+                            alert('Error deleting project');
+                        }
+                    }
+                });
+                
+                cardDiv.appendChild(deleteButton);
+            }
 
             const cardImg = document.createElement('img');
             cardImg.className = 'card-img-top p-3 rounded-5';

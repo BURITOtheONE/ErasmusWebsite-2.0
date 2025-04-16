@@ -87,6 +87,9 @@ app.use('/uploads', express.static(uploadsDir)); // Serve uploaded files
 app.use('/js', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js')));
 app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')));
 
+// Add route to serve Bootstrap icons
+app.use('/icons', express.static(path.join(__dirname, 'node_modules/bootstrap-icons/font')));
+
 app.set('view engine', 'ejs');
 
 // Trust reverse proxies like Render's load balancers
@@ -136,15 +139,18 @@ app.get('/', (req, res) => res.render('index'));
 app.get('/about', (req, res) => res.render('about'));
 app.get('/contact', (req, res) => res.render('contact'));
 
-// Updated admin route with better logging
+// Updated admin route with better logging and isAdmin variable
 app.get('/admin', (req, res) => {
   console.log('Session data:', req.session);
   console.log('Session User ID:', req.session.userId);
 
   if (req.session.userId) {
-    res.render('admin', { user: req.session.userId }); // Renders Admin Panel
+    res.render('admin', { 
+      user: req.session.userId,
+      isAdmin: true // Add this line - if they're on the admin page, they're an admin
+    });
   } else {
-    res.render('adminlogin', { error: null }); // Pass null error to template
+    res.render('adminlogin', { error: null });
   }
 });
 
@@ -304,6 +310,37 @@ app.post('/admin/news', upload.single('newsImage'), async (req, res) => {
   }
 });
 
+// Add this route to handle project deletion
+app.delete('/api/projects/:id', async (req, res) => {
+  try {
+    // Check if user is logged in as admin
+    if (!req.session.userId) {
+      return res.status(401).send('Unauthorized');
+    }
+    
+    const projectId = req.params.id;
+    const deletedProject = await Project.findByIdAndDelete(projectId);
+    
+    if (!deletedProject) {
+      return res.status(404).send('Project not found');
+    }
+    
+    // If project had an image, delete it from the uploads folder
+    if (deletedProject.imageUrl) {
+      const imagePath = path.join(__dirname, deletedProject.imageUrl.replace(/^\//, ''));
+      // Check if file exists before attempting to delete
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath);
+      }
+    }
+    
+    res.status(200).send('Project deleted successfully');
+  } catch (error) {
+    console.error('Error deleting project:', error);
+    res.status(500).send('Error deleting project');
+  }
+});
+
 // Logout route
 app.get('/admin/logout', (req, res) => {
   req.session.destroy((err) => {
@@ -323,11 +360,13 @@ app.get('/check-session', (req, res) => {
   }
 });
 
-// Route to load projects
+// Update the projects route to pass admin status to the template
 app.get('/projects', async (req, res) => {
   try {
     const projects = await Project.find().sort({ createdAt: -1 });
-    res.render('projects', { projects }); // Render to a template named "projects"
+    // Check if user is admin and pass that info to template
+    const isAdmin = !!req.session.userId;
+    res.render('projects', { projects, isAdmin }); // Pass isAdmin to the template
   } catch (error) {
     console.error('Error fetching projects:', error.message);
     res.status(500).send('Error fetching projects');
@@ -341,7 +380,9 @@ app.get('/projects/:id', async (req, res) => {
     if (!project) {
       return res.status(404).send('Project not found');
     }
-    res.render('project-detail', { project });
+    // Pass admin status to the template
+    const isAdmin = !!req.session.userId;
+    res.render('project-detail', { project, isAdmin });
   } catch (error) {
     console.error('Error fetching project:', error.message);
     res.status(500).send('Error fetching project');
