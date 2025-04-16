@@ -54,7 +54,7 @@
   <!-- JavaScript to load navbar.html -->
   <script>
     window.addEventListener("DOMContentLoaded", () => {
-      fetch("/views/navbar.html") // Make sure the path is correct
+      fetch("navbar.html") // Make sure the path is correct
         .then(res => res.text())
         .then(html => {
           document.getElementById("navbar-container").innerHTML = html;
