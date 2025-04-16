@@ -6,6 +6,7 @@
   <title>Erasmus+ Project</title>
   <icon rel="icon" href="public/assets/img/favicon.ico" type="image/x-icon" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
   <style>
     body {
       background-color: #f7f9fc;
@@ -155,6 +156,19 @@
           console.error('Error loading navbar:', error);
         });
     };
+
+    document.addEventListener("DOMContentLoaded", function () {
+    const navLinks = document.querySelectorAll(".nav-link");
+    const navbarCollapse = document.querySelector(".navbar-collapse");
+
+    navLinks.forEach(link => {
+      link.addEventListener("click", () => {
+        if (navbarCollapse.classList.contains("show")) {
+          new bootstrap.Collapse(navbarCollapse).toggle();
+        }
+      });
+    });
+  });
   </script>
 
   <!-- Footer -->
