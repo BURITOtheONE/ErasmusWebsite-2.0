@@ -6,9 +6,15 @@
     <meta name="description" content="Admin Page - Manage Projects and News">
     <meta name="author" content="PPMG 'akad. Ivan Tsenov'">
     <title>Admin Panel</title>
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
+            <!-- CSS and Other Scripts-->
+            <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+            <link href="css/style.css" rel="stylesheet">
+            <!-- Bootstrap JS and custom script -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="js/scripts.js"></script>
+            <script src="js/projectss.js"></script>
+            <script src="js/imagePreview.js"></script>
 </head>
 <body>
     <!-- Navigation -->
@@ -24,6 +30,8 @@
                     <li class="nav-item"><a class="nav-link" href="/projects">Projects</a></li>
                     <li class="nav-item active"><a class="nav-link" href="/admin">Admin</a></li>
                     <li class="nav-item"><a class="nav-link" href="/news">News</a></li>
+                    <!-- Added Logout Button -->
+                    <li class="nav-item"><a class="nav-link btn btn-outline-danger" href="/admin/logout">Logout</a></li>
                 </ul>
             </div>
         </div>
@@ -40,6 +48,7 @@
 
             <!-- Form to Add/Update Projects -->
             <form id="projectForm" enctype="multipart/form-data" action="/admin/project" method="POST">
+                <input type="hidden" id="projectId" name="projectId">
                 <div class="mb-3">
                     <label for="projectTitle" class="form-label">Title</label>
                     <input type="text" class="form-control" id="projectTitle" name="title" placeholder="Project Title" required>
@@ -68,17 +77,24 @@
                 </div>
                 <div class="mb-3">
                     <label for="projectImage" class="form-label">Upload Project Image</label>
-                    <input type="file" class="form-control" id="projectImage" name="projectImage" accept="image/*" required>
+                    <input type="file" class="form-control" id="projectImage" name="projectImage" accept="image/*">
+                    <small class="form-text text-muted">Leave empty to keep current image when editing</small>
                     <div id="projectImagePreview" class="mt-2"></div>
                 </div>
-                <button type="submit" class="btn btn-success">Save Project</button>
+                <div class="d-flex">
+                    <button type="submit" class="btn btn-success me-2">Save Project</button>
+                    <button type="button" id="cancelEdit" class="btn btn-secondary" style="display: none;">Cancel Edit</button>
+                </div>
             </form>
 
             <!-- Projects List -->
             <div class="container p-4">
                 <div class="card">
                     <h2 class="mx-2">Edit Projects</h2>
-                    <div id="adminProjects" class="mt-5"></div>
+                    <!-- Projects Container -->
+                    <div id="projectsContainer" class="row gx-4 gx-lg-5"  data-is-admin="<%= isAdmin %>">
+                        <!-- Projects will be dynamically loaded here -->
+                    </div>
                 </div>
             </div>
         </section>
@@ -89,24 +105,24 @@
             <form id="newsForm" enctype="multipart/form-data" action="/admin/news" method="POST">
                 <div class="mb-3">
                     <label for="newsTitle" class="form-label">News Title</label>
-                    <input type="text" class="form-control" id="newsTitle" placeholder="Enter news title" required>
+                    <input type="text" class="form-control" id="newsTitle" name="title" placeholder="Enter news title" required>
                 </div>
                 <div class="mb-3">
                     <label for="newsContent" class="form-label">News Content</label>
-                    <textarea class="form-control" id="newsContent" rows="4" placeholder="Enter news content" required></textarea>
+                    <textarea class="form-control" id="newsContent" name="content" rows="4" placeholder="Enter news content" required></textarea>
                 </div>
                 <div class="mb-3">
                     <label for="newsImage" class="form-label">Upload News Image</label>
-                    <input type="file" class="form-control" id="newsImage" accept="image/*" required>
+                    <input type="file" class="form-control" id="newsImage" name="newsImage" accept="image/*" required>
                     <div id="newsImagePreview" class="mt-2"></div>
                 </div>
                 <div class="mb-3">
                     <label for="newsCategory" class="form-label">Category (Optional)</label>
-                    <input type="text" class="form-control" id="newsCategory" placeholder="News Category">
+                    <input type="text" class="form-control" id="newsCategory" name="category" placeholder="News Category">
                 </div>
                 <div class="mb-3">
                     <label for="newsDate" class="form-label">Publication Date</label>
-                    <input type="date" class="form-control" id="newsDate" required>
+                    <input type="date" class="form-control" id="newsDate" name="date" required>
                 </div>
                 <button type="submit" class="btn btn-success">Add News</button>
             </form>
@@ -114,29 +130,167 @@
     </div>
 </div>
 
-    <!-- Bootstrap JS and custom script -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/scripts.js"></script>
-    <script src="js/imagePreview.js"></script>
-
-  <script>
+    <script>
     document.addEventListener('DOMContentLoaded', () => {
       const projectForm = document.getElementById('projectForm');
-      const previewImage = document.getElementById('previewImage');
-
+      const projectsContainer = document.getElementById('projectsContainer');
+      const cancelEditBtn = document.getElementById('cancelEdit');
+      
+      // Load projects
+      loadProjects();
+      
       // Preview the uploaded image
-      projectForm.projectImage.addEventListener('change', (event) => {
-        const file = event.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            previewImage.src = e.target.result;
-            previewImage.style.display = 'block';
-          };
-          reader.readAsDataURL(file);
-        }
-      });
+      if (projectForm.projectImage) {
+        projectForm.projectImage.addEventListener('change', (event) => {
+          const file = event.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              const previewDiv = document.getElementById('projectImagePreview');
+              previewDiv.innerHTML = `<img src="${e.target.result}" alt="Preview" class="img-fluid" style="max-height: 200px;">`;
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+      
+      // Handle cancel edit button
+      if (cancelEditBtn) {
+        cancelEditBtn.addEventListener('click', () => {
+          resetForm();
+        });
+      }
+      
+      // Function to load projects
+      function loadProjects() {
+        fetch('/api/projects')
+          .then(response => response.json())
+          .then(projects => {
+            projectsContainer.innerHTML = '';
+            
+            if (projects.length === 0) {
+              projectsContainer.innerHTML = '<div class="col-12"><p>No projects found.</p></div>';
+              return;
+            }
+            
+            projects.forEach(project => {
+              const projectCard = document.createElement('div');
+              projectCard.className = 'col-md-4 mb-4';
+              projectCard.innerHTML = `
+                <div class="card h-100">
+                  <img src="${project.imageUrl}" class="card-img-top" alt="${project.title}" style="height: 200px; object-fit: cover;">
+                  <div class="card-body">
+                    <h5 class="card-title">${project.title}</h5>
+                    <p class="card-text">${project.description.substring(0, 100)}${project.description.length > 100 ? '...' : ''}</p>
+                    <p class="card-text"><small class="text-muted">Year: ${project.year}</small></p>
+                    <div class="d-flex justify-content-between">
+                      <button class="btn btn-primary edit-project" data-id="${project._id}">Edit</button>
+                      <button class="btn btn-danger delete-project" data-id="${project._id}">Delete</button>
+                    </div>
+                  </div>
+                </div>
+              `;
+              projectsContainer.appendChild(projectCard);
+            });
+            
+            // Add event listeners to edit buttons
+            document.querySelectorAll('.edit-project').forEach(button => {
+              button.addEventListener('click', function() {
+                const projectId = this.getAttribute('data-id');
+                editProject(projectId);
+              });
+            });
+            
+            // Add event listeners to delete buttons
+            document.querySelectorAll('.delete-project').forEach(button => {
+              button.addEventListener('click', function() {
+                const projectId = this.getAttribute('data-id');
+                if (confirm('Are you sure you want to delete this project?')) {
+                  deleteProject(projectId);
+                }
+              });
+            });
+          })
+          .catch(error => {
+            console.error('Error loading projects:', error);
+            projectsContainer.innerHTML = '<div class="col-12"><p>Error loading projects. Please try again later.</p></div>';
+          });
+      }
+      
+      // Function to edit project
+      function editProject(projectId) {
+        fetch(`/api/projects/${projectId}`)
+          .then(response => response.json())
+          .then(project => {
+            // Fill the form with project data
+            projectForm.projectId.value = project._id;
+            projectForm.title.value = project.title;
+            projectForm.description.value = project.description;
+            projectForm.creators.value = Array.isArray(project.creators) ? project.creators.join(' ') : project.creators;
+            projectForm.websiteLink.value = project.websiteLink || '';
+            projectForm.tags.value = Array.isArray(project.tags) ? project.tags.join(' ') : project.tags;
+            projectForm.year.value = project.year;
+            
+            // Show project image preview
+            if (project.imageUrl) {
+              const previewDiv = document.getElementById('projectImagePreview');
+              previewDiv.innerHTML = `<img src="${project.imageUrl}" alt="Current Image" class="img-fluid" style="max-height: 200px;">`;
+            }
+            
+            // Update form action
+            projectForm.action = `/admin/project/${projectId}`;
+            projectForm.method = 'POST';
+            
+            // Change form button text
+            projectForm.querySelector('button[type="submit"]').textContent = 'Update Project';
+            
+            // Show cancel button
+            cancelEditBtn.style.display = 'block';
+            
+            // Scroll to the form
+            projectForm.scrollIntoView({ behavior: 'smooth' });
+          })
+          .catch(error => {
+            console.error('Error loading project for edit:', error);
+            alert('Error loading project data. Please try again.');
+          });
+      }
+      
+      // Function to delete project
+      function deleteProject(projectId) {
+        fetch(`/api/projects/${projectId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed to delete project');
+          }
+          return response.text();
+        })
+        .then(() => {
+          // Reload projects after deletion
+          loadProjects();
+        })
+        .catch(error => {
+          console.error('Error deleting project:', error);
+          alert('Error deleting project. Please try again.');
+        });
+      }
+      
+      // Function to reset form
+      function resetForm() {
+        projectForm.reset();
+        projectForm.projectId.value = '';
+        projectForm.action = '/admin/project';
+        projectForm.method = 'POST';
+        projectForm.querySelector('button[type="submit"]').textContent = 'Save Project';
+        cancelEditBtn.style.display = 'none';
+        document.getElementById('projectImagePreview').innerHTML = '';
+      }
     });
-  </script>
+    </script>
 </body>
 </html>

@@ -18,10 +18,14 @@ const projectSchema = new mongoose.Schema({
     websiteLink: {
         type: String,
         validate: {
-            validator: (v) => validator.isURL(v),
+            validator: function(v) {
+                // Allow empty strings without validation
+                if (!v || v === '') return true;
+                return validator.isURL(v);
+            },
             message: (props) => `${props.value} is not a valid URL!`,
         },
-        required: true,
+        default: '',
     },
     tags: {
         type: String,
@@ -29,12 +33,25 @@ const projectSchema = new mongoose.Schema({
     },
     imageUrl: {
         type: String,
-        default: '', // Default to an empty string
+        default: '',
     },
     year: {
         type: Number,
         required: true,
     },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    }
+});
+
+// Pre-save hook to clean tags
+projectSchema.pre('save', function(next) {
+    // Make sure tags is properly formatted - it will be handled as a space-separated string
+    if (this.tags && typeof this.tags !== 'string') {
+        this.tags = Array.isArray(this.tags) ? this.tags.join(' ') : String(this.tags);
+    }
+    next();
 });
 
 // Create Project Model

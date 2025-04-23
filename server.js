@@ -105,27 +105,30 @@ mongoose.connect(process.env.MONGO_URI)
   .catch(err => console.error("Failed to connect to MongoDB", err));
 
 
-// API to fetch projects
+// Modified API route to handle projects correctly
 app.get('/api/projects', async (req, res) => {
   try {
-    const projects = await Project.find().sort({ createdAt: -1 }); // Fetch all projects from the database
+    const projects = await Project.find().sort({ year: -1 }); // Sort by year descending by default
     
     // Process each project to ensure tags are in the right format
     const processedProjects = projects.map(project => {
       // Convert project to a regular object
       const projectObj = project.toObject();
       
-      // Ensure tags is always an array
+      // Process tags to ensure it's in the expected format
       if (typeof projectObj.tags === 'string') {
         projectObj.tags = projectObj.tags.split(/[\s,]+/).filter(Boolean);
       } else if (!Array.isArray(projectObj.tags)) {
         projectObj.tags = [];
       }
       
+      // Convert MongoDB ObjectId to string for safer JSON handling
+      projectObj._id = projectObj._id.toString();
+      
       return projectObj;
     });
     
-    res.json(processedProjects); // Send the processed projects as JSON
+    res.json(processedProjects);
   } catch (error) {
     console.error('Error fetching projects:', error.message);
     res.status(500).json({ error: 'Failed to fetch projects' });
@@ -136,15 +139,18 @@ app.get('/', (req, res) => res.render('index'));
 app.get('/about', (req, res) => res.render('about'));
 app.get('/contact', (req, res) => res.render('contact'));
 
-// Updated admin route with better logging
+// Updated admin route with isAdmin variable
 app.get('/admin', (req, res) => {
   console.log('Session data:', req.session);
   console.log('Session User ID:', req.session.userId);
 
   if (req.session.userId) {
-    res.render('admin', { user: req.session.userId }); // Renders Admin Panel
+    res.render('admin', { 
+      user: req.session.userId,
+      isAdmin: true // Add this line - if they're on the admin page, they're an admin
+    });
   } else {
-    res.render('adminlogin', { error: null }); // Pass null error to template
+    res.render('adminlogin', { error: null });
   }
 });
 
@@ -258,22 +264,110 @@ app.post('/admin/project', upload.single('projectImage'), async (req, res) => {
       }
     }
 
+    // Process tags to ensure proper format
+    let tagsArray = [];
+    if (tags) {
+      tagsArray = typeof tags === 'string' ? tags : tags.join(' ');
+    }
+
     const newProject = new Project({
       title,
       description,
       creators: creatorsArray,
-      websiteLink: websiteLink || null, // Optional field
-      tags: tags || null, // Optional field
+      websiteLink: websiteLink || '',
+      tags: tagsArray,
       year: parseInt(year, 10) || new Date().getFullYear(),
       imageUrl,
       createdAt: new Date()
     });
 
     await newProject.save();
-    res.redirect('/admin'); // Redirect to admin panel or success page
+    res.redirect('/admin');
   } catch (error) {
     console.error('Error saving project:', error);
     res.status(400).send('Error saving project: ' + error.message);
+  }
+});
+
+// Add this route to handle fetching a single project for editing
+app.get('/api/projects/:id', async (req, res) => {
+  try {
+    // Check if user is logged in as admin
+    if (!req.session.userId) {
+      return res.status(401).send('Unauthorized');
+    }
+    
+    const projectId = req.params.id;
+    const project = await Project.findById(projectId);
+    
+    if (!project) {
+      return res.status(404).send('Project not found');
+    }
+    
+    res.json(project);
+  } catch (error) {
+    console.error('Error fetching project:', error);
+    res.status(500).send('Error fetching project');
+  }
+});
+
+// Add this route to handle project updates
+app.post('/admin/project/:id', upload.single('projectImage'), async (req, res) => {
+  try {
+    // Check if user is logged in as admin
+    if (!req.session.userId) {
+      return res.status(401).send('Unauthorized');
+    }
+    
+    const projectId = req.params.id;
+    const { title, description, creators, websiteLink, tags, year } = req.body;
+    
+    // Validate required fields
+    if (!title || !description || !year) {
+      throw new Error('Title, description, and year are required fields');
+    }
+    
+    // Find the project
+    const project = await Project.findById(projectId);
+    if (!project) {
+      return res.status(404).send('Project not found');
+    }
+    
+    // Process creators to ensure they're stored as an array
+    let creatorsArray = [];
+    if (creators) {
+      if (Array.isArray(creators)) {
+        creatorsArray = creators;
+      } else if (typeof creators === 'string') {
+        creatorsArray = creators.split(/[\s,]+/).filter(Boolean);
+      }
+    }
+    
+    // Update project fields
+    project.title = title;
+    project.description = description;
+    project.creators = creatorsArray;
+    project.websiteLink = websiteLink || '';
+    project.tags = tags || '';
+    project.year = parseInt(year, 10) || new Date().getFullYear();
+    
+    // Update image if provided
+    if (req.file) {
+      // If there's an existing image, delete it
+      if (project.imageUrl) {
+        const oldImagePath = path.join(__dirname, project.imageUrl.replace(/^\//, ''));
+        if (fs.existsSync(oldImagePath)) {
+          fs.unlinkSync(oldImagePath);
+        }
+      }
+      project.imageUrl = `/uploads/${req.file.filename}`;
+    }
+    
+    await project.save();
+    res.redirect('/admin');
+  } catch (error) {
+    console.error('Error updating project:', error);
+    res.status(400).send('Error updating project: ' + error.message);
   }
 });
 
