@@ -4,7 +4,7 @@
   "description": "boottrap and tampleit",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "devStart": "nodemon server.js"
   },
   "author": "",
   "license": "ISC",
