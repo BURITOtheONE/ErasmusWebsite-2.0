@@ -113,34 +113,16 @@
 
   <!-- Navbar -->
   <script>
-    window.onload = function () {
-      fetch('navbar.html')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-          }
-          return response.text();
+     window.addEventListener("DOMContentLoaded", () => {
+      fetch("navbar.html") // Make sure the path is correct
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById("navbar-container").innerHTML = html;
         })
-        .then(data => {
-          document.getElementById('navbar-container').innerHTML = data;
-        })
-        .catch(error => {
-          console.error('Error loading navbar:', error);
+        .catch(err => {
+          console.error("Error loading navbar:", err);
         });
-    };
-
-    document.addEventListener("DOMContentLoaded", function () {
-    const navLinks = document.querySelectorAll(".nav-link");
-    const navbarCollapse = document.querySelector(".navbar-collapse");
-
-    navLinks.forEach(link => {
-      link.addEventListener("click", () => {
-        if (navbarCollapse.classList.contains("show")) {
-          new bootstrap.Collapse(navbarCollapse).toggle();
-        }
-      });
     });
-  });
   </script>
 
   <!-- Footer -->
