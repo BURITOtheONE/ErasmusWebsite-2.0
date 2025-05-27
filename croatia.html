@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Erasmus+ Project</title>
+    <icon rel="icon" href="public/assets/img/favicon.ico" type="image/x-icon" />
+    <link href="public/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <script src="public/bootstrap/js/bootstrap.bundle.min.js" defer></script>
+</head>
+<body>
+
+  <!-- Navbar will load here -->
+  <div id="navbar-container"></div>
+
+  <main class="container my-5">
+    <section class="text-center mb-5">
+      <h1 class="mb-3">Exchange of experience with colleagues from Croatia</h1>
+    </section>
+
+    <div class="row justify-content-center mb-4">
+      <div class="col-md-4">
+        <img src="public/assets/img/croatia_1.jpg" class="img-fluid rounded shadow" alt="Activity image">
+      </div>
+    </div>
+
+    <section class="row justify-content-center">
+      <div class="col-md-8">
+        <p>
+          Teachers of PPMG Acad. Ivan Tsenov ", Vratsa took part in mobility under 
+          the Erasmus+ program, which was implemented from November 25 to November 30, 
+          2024 in Croatia . The program included lectures and workshops, providing practical 
+          experience and observation on the application of nuclear and medical physics. Mobility 
+          has been carried out in several significant institutions in Croatia, including leading 
+          universities, research centers and hospitals.
+        </p>
+        <img src="public/assets/img/croatia_2.jpg" class="img-fluid rounded shadow" alt="Activity image">
+        <p>
+          A main highlight was a visit to the Ribro Hospital in Zagreb, 
+          where participants had the opportunity to learn about the latest 
+          applications of medical physics, including the use of radiologic and nuclear 
+          technologies for diagnosis and therapy. The visits included observation of 
+          work in radiology and oncology wards, as well as participating in discussions with medical professionals.
+        </p>
+        <img src="public/assets/img/croatia_3.jpg" class="img-fluid rounded shadow" alt="Activity image">
+        <p>
+          As part of the mobility, the participants visited the Faculty of 
+          Science and Mathematics at the University of Zagreb and the University of 
+          Split, where innovative research and curriculum in the field of nuclear 
+          physics were presented. It provided an opportunity to exchange experiences with 
+          faculty and students, as well as to discuss future collaborations.
+        </p>
+        <img src="public/assets/img/croatia_4.jpg" class="img-fluid rounded shadow" alt="Activity image">
+        <p>
+          One of the key points of the program was 
+          the visit to the Ruger Boskovic Institute, a leading 
+          scientific research institution in Croatia. Participants 
+          had the opportunity to learn about current research projects, 
+          including in nuclear and medical physics, and observe high-tech 
+          equipment and laboratories.
+        </p>
+        <img src="public/assets/img/croatia_5.jpg" class="img-fluid rounded shadow" alt="Activity image">
+        <p>
+          The program also included a visit to the RIT Croatia 
+          (Rochester Institute of Technology) campus, where an interdisciplinary 
+          approach to learning combining innovation and practical application in science 
+          and technology was demonstrated. The Bulgarian team presented its experience for 
+          an integrated approach to education by creating links between different disciplines, 
+          which stimulates creativity, critical thinking and the application of knowledge in 
+          real life. The lesson “The Northern Lights: a Fusion of Science, Myth and Magic” 
+          that we presented, integrates these elements and demonstrates the STEAM approach to education.
+        </p>
+        <img src="public/assets/img/croatia_6.jpg" class="img-fluid rounded shadow" alt="Activity image">
+        <p>
+          This mobility, which is a project in connection with 
+          Erasmus Accreditation for School Education KA-121-SCH, 
+          provided participants Pepa Pavlova, Lyudmila Jenkins, 
+          Dimitrina Milcheva and Annie Pavlova with valuable knowledge, 
+          experience and contacts that will be of great benefit to their 
+          professional development and for the introduction of new practices 
+          in the field of science and education.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Scripts -->
+  <script>
+    // Load navbar
+    window.addEventListener("DOMContentLoaded", () => {
+      fetch("navbar.html") // Make sure the path is correct
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById("navbar-container").innerHTML = html;
+        })
+        .catch(err => {
+          console.error("Error loading navbar:", err);
+        });
+    });
+  </script>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>This site was created by students of the PPMG for the purposes of the Erasmus + project. The European Commission is not responsible for its content.</p>
+    <p>© 2025 Erasmus+ Projects | All rights reserved</p>
+  </footer>
+
+</body>
+</html>

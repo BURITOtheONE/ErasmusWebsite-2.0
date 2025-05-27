@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Erasmus+ Project</title>
+    <icon rel="icon" href="public/assets/img/favicon.ico" type="image/x-icon" />
+    <link href="public/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <script src="public/bootstrap/js/bootstrap.bundle.min.js" defer></script>
+</head>
+<body>
+
+  <!-- Navbar will load here -->
+  <div id="navbar-container"></div>
+
+  <main class="container my-5">
+    <section class="text-center mb-5">
+      <h1 class="mb-3">"STEAM - Based Teaching" and "Artificial Intelligence and Virtual Reality in Language Learning" - Participation of Teachers in Erasmus+ Program Courses</h1>
+    </section>
+
+    <div class="row justify-content-center mb-4">
+      <div class="col-md-4">
+        <img src="public/assets/img/ai_1.jpg" class="img-fluid rounded shadow" alt="Activity image">
+      </div>
+    </div>
+
+    <section class="row justify-content-center">
+      <div class="col-md-8">
+        <p>
+          Within the framework of their professional development, 
+          the teachers from PPMG "Akad Ivan Tsenov" - Vratsa, Mrs. 
+          Veselka Valova, Deputy Director and Senior Mathematics Teacher, 
+          Mrs. Annie Pavlova, Senior English Teacher and Mrs. Pepa Pavlava, 
+          Project Coordinator and Senior Physics and Astronomy Teacher, 
+          took part in the trainings under the Erasmus+ program, targeting 
+          STEAM - based teaching methods, as well as the application of 
+          artificial intelligence (AI) and virtual reality (VR) in 
+          language learning. These international courses were held 
+          in Tallinn, Estonia in implementation of Project No. 
+          2024-1-BG01-KA121-SCH-000202833 on Erasmus Accreditation for 
+          School Education KA-121-SCH. The training has provided a valuable 
+          opportunity to refine teaching practices, enhance digital competencies 
+          and apply innovative pedagogical approaches.
+        </p>
+        <img src="public/assets/img/ai_2.jpg" class="img-fluid rounded shadow" alt="Activity image">
+        <p>
+          STEAM-related modules (Science, Technology, Engineering, Arts, and Mathematics) focused 
+          on interdisciplinary, project-based learning that encourages creativity, collaboration 
+          and critical thinking among students. Teachers had the opportunity to try hands-on 
+          activities and digital tools supporting STEAM principles, as well as exchange 
+          experiences with colleagues from other European countries.
+        </p>
+        <img src="public/assets/img/ai_3.jpg" class="img-fluid rounded shadow" alt="Activity image">
+        <p>
+          AI and VR training introduced participants to the latest technologies that transform 
+          language learning into an interactive and personalised process. Artificial intelligence 
+          tools demonstrated how adaptive systems can meet students’ individual needs and provide 
+          immediate feedback, while VR has created opportunities to practice language skills in a 
+          realistic virtual environment.
+        </p>
+        <img src="public/assets/img/ai_4.jpg" class="img-fluid rounded shadow" alt="Activity image">
+        <p>
+          Teachers worked in teams and, alongside their peers, discussed the challenges and 
+          benefits of using the STEAM approach in education, shared their experiences and 
+          perspectives on integrating AI and VR in the education process, and explored potential 
+          strategies for introducing these technologies into the classroom. As a result of working 
+          together, the teams developed lesson plans based on the idea of using modern technology 
+          in the learning environment.
+        </p>
+        <img src="public/assets/img/ai_5.jpg" class="img-fluid rounded shadow" alt="Activity image">
+        <p>
+          Course participants got acquainted with the specifics of the Estonian education system 
+          and visited the Ehte Humanitaargumnaasium High School, where their Estonian colleagues 
+          shared their intelligent solutions for educational innovation.
+        </p>
+        <img src="public/assets/img/ai_6.jpg" class="img-fluid rounded shadow" alt="Activity image">
+        <p>
+          Participation in the Erasmus + courses contributed significantly to the professional 
+          growth of teachers and the modernization of the learning process in their educational 
+          institution. The knowledge and experience gained will be used to create a more engaging, 
+          inclusive and future-oriented learning environment for students. An electronic handbook 
+          for teachers, including the developed lesson plans, is about to be issued, which will be 
+          available in the school's e-library and published on the PPMG - Vratsa website.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Scripts -->
+  <script>
+    // Load navbar
+    window.addEventListener("DOMContentLoaded", () => {
+      fetch("navbar.html") // Make sure the path is correct
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById("navbar-container").innerHTML = html;
+        })
+        .catch(err => {
+          console.error("Error loading navbar:", err);
+        });
+    });
+  </script>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>This site was created by students of the PPMG for the purposes of the Erasmus + project. The European Commission is not responsible for its content.</p>
+    <p>© 2025 Erasmus+ Projects | All rights reserved</p>
+  </footer>
+
+</body>
+</html>
