@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Erasmus+ Project</title>
+    <icon rel="icon" href="public/assets/img/favicon.ico" type="image/x-icon" />
+    <link href="public/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <script src="public/bootstrap/js/bootstrap.bundle.min.js" defer></script>
+</head>
+<body>
+
+  <!-- Navbar will load here -->
+  <div id="navbar-container"></div>
+
+  <main class="container my-5">
+    <section class="text-center mb-5">
+      <h1 class="mb-3">Strong participation of students from the Profiled Science and 
+        Mathematical High School "Acad. Ivan Tsenov "Vratsa in the "Incubator for Young Talent"</h1>
+    </section>
+
+    <div class="row justify-content-center mb-4">
+      <div class="col-md-4">
+        <img src="public/assets/img/youngTalent_1.jpg" class="img-fluid rounded shadow" alt="Activity image">
+      </div>
+    </div>
+
+    <section class="row justify-content-center">
+      <div class="col-md-8">
+        <p>
+          Strong participation of students from the Profiled Science 
+          and Mathematical High School "Acad. Ivan Tsenov "Vratsa in the 
+          "Incubator for Young Talent", organized by the "Association of 
+          Young Scientists". The event aims to provide an opportunity for 
+          \young scientists to present their scientific achievements.
+        </p>
+        <img src="public/assets/img/youngTalent_2.jpg" class="img-fluid rounded shadow" alt="Activity image">
+        <p>
+          As part of the first day of the initiative, the youth spent several 
+          hours teaming up in teams around an idea in areas of environmental 
+          conservation, infrastructure, social entrepreneurship and economic development.
+        </p>
+        <h6>
+          On Monday the 10th. February, at a peculiar round table, they briefly presented their ideas:
+        </h6>
+        <ul>
+          <li>
+            Clean Future for trash can sensors and an event to raise awareness about garbage recycling among the public.
+          </li>
+          <li>
+            Mobile transportation application with statistics and routes optimization.
+          </li>
+          <li>
+            A "Second Chance for Life in the Villages" for a relationship between business and dual education.
+            Possibility for the Future - to support children deprived of parental care for university education through a mentoring program.
+          </li>
+          <li>
+            Aquasmart hardware and software for effective management of water resources.
+          </li>
+        </ul>
+        <img src="public/assets/img/youngTalent_3.jpg" class="img-fluid rounded shadow" alt="Activity image">
+        <p>
+          Deputy took part in the forum. -mayor of Vratsa Municipality 
+          Petya Dolapchieva, Chairman of the Municipal Council - Vratsa, 
+          Vladimir Hristov, representative of TPP, Maya Milova, 
+          Borislav Boev from the Kozloduy Novi Powers NPP and representatives 
+          of business, education and administration, scientific organizations 
+          and NGOs sector and funded by the project of the Association of Young 
+          Scientists program Erasmus+ of the European Union.
+        </p>
+        <img src="public/assets/img/youngTalent_4.jpg" class="img-fluid rounded shadow" alt="Activity image">
+        <p>
+          Some of the participating young people from the mathematical high 
+          school are junior ambassadors of the programme for schools ambassadors 
+          to the EP and students from the Erasmus+ club, who were accompanied at 
+          the event at the presentation by Senior Ambassador Ivalina Ivanova and 
+          Lubina Karamelska, who are working on the project Jean Monet - EU introduction initiatives.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Scripts -->
+  <script>
+    // Load navbar
+    window.addEventListener("DOMContentLoaded", () => {
+      fetch("navbar.html") // Make sure the path is correct
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById("navbar-container").innerHTML = html;
+        })
+        .catch(err => {
+          console.error("Error loading navbar:", err);
+        });
+    });
+  </script>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>This site was created by students of the PPMG for the purposes of the Erasmus + project. The European Commission is not responsible for its content.</p>
+    <p>© 2025 Erasmus+ Projects | All rights reserved</p>
+  </footer>
+
+</body>
+</html>

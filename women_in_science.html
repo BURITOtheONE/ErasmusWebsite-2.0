@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Erasmus+ Project</title>
+    <icon rel="icon" href="public/assets/img/favicon.ico" type="image/x-icon" />
+    <link href="public/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <script src="public/bootstrap/js/bootstrap.bundle.min.js" defer></script>
+</head>
+<body>
+
+  <!-- Navbar will load here -->
+  <div id="navbar-container"></div>
+
+  <main class="container my-5">
+    <section class="text-center mb-5">
+      <h1 class="mb-3">February 11 - International Day of Women and Girls in Science</h1>
+    </section>
+
+    <div class="row justify-content-center mb-4">
+      <div class="col-md-4">
+        <img src="public/assets/img/womenSci_1.jpg" class="img-fluid rounded shadow" alt="Activity image">
+      </div>
+    </div>
+
+    <section class="row justify-content-center">
+      <div class="col-md-8">
+        <p>
+          Proclaimed by the United Nations General Assembly in 2015, 
+          the International Day of Women and Girls in Science is 
+          celebrated on February 11 each year. This day provides 
+          an opportunity to recall the key role women and girls 
+          play in the science and technology community and the need to enhance their participation.
+        </p>
+        <img src="public/assets/img/womenSci_2.jpg" class="img-fluid rounded shadow" alt="Activity image">
+        <p>
+          The girls from the Erasmus+ club celebrated the day by 
+          putting together an exhibition of nine posters they made, 
+          telling the stories of famous world and Bulgarian women 
+          scientists. Increased participation of women brings diversity, 
+          fresh perspectives, and talent in research and scientific 
+          undertakings. They have invested their creativity, which women 
+          and girls possess, which is important in accelerating the progress of science.
+        </p>
+        <p>
+          Bridging the gender gap in STEM is essential for leveraging 
+          diverse talents to address relevant global challenges, 
+          including healthcare and climate change.
+        </p>
+        <img src="public/assets/img/womenSci_3.jpg" class="img-fluid rounded shadow" alt="Activity image">
+        <p>
+          The exhibition is related to the realization of the goals set 
+          in the Erasmus Accreditation for School Education, in connection 
+          with the implementation of Project No.2024-1-BG01-KA121-SCH-000202833, 
+          in which the principles of gender equality lie.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Scripts -->
+  <script>
+    // Load navbar
+    window.addEventListener("DOMContentLoaded", () => {
+      fetch("navbar.html") // Make sure the path is correct
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById("navbar-container").innerHTML = html;
+        })
+        .catch(err => {
+          console.error("Error loading navbar:", err);
+        });
+    });
+  </script>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>This site was created by students of the PPMG for the purposes of the Erasmus + project. The European Commission is not responsible for its content.</p>
+    <p>© 2025 Erasmus+ Projects | All rights reserved</p>
+  </footer>
+
+</body>
+</html>

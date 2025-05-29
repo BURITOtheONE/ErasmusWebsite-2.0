@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Erasmus+ Project</title>
+    <icon rel="icon" href="public/assets/img/favicon.ico" type="image/x-icon" />
+    <link href="public/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <script src="public/bootstrap/js/bootstrap.bundle.min.js" defer></script>
+</head>
+<body>
+
+  <!-- Navbar will load here -->
+  <div id="navbar-container"></div>
+
+  <main class="container my-5">
+    <section class="text-center mb-5">
+      <h1 class="mb-3">Erasmus Club at PPMG "Acad. Ivan Tsenov marked Europe Day</h1>
+    </section>
+
+    <div class="row justify-content-center mb-4">
+      <div class="col-md-4">
+        <img src="public/assets/img/europeDay_1.jpg" class="img-fluid rounded shadow" alt="Activity image">
+      </div>
+    </div>
+
+    <section class="row justify-content-center">
+      <div class="col-md-8">
+        <p>
+          Erasmus Club at PPMG "Acad. Ivan Tsenov marked the 75th 
+          anniversary of signing the Schumann Declaration, which sets 
+          the beginning of the European Union, with a meeting to disseminate 
+          the results of two current Erasmus projects implemented during the 
+          current school year. The event was attended by students from eighth 
+          and ninth grade, to whom the Erasmus Club members talked about their 
+          involvement in the mobility conducted in Belgium and Italy, the 
+          training they underwent there, the experience gained and the contacts made.
+        </p>
+        <img src="public/assets/img/europeDay_2.jpg" class="img-fluid rounded shadow" alt="Activity image">
+        <p>
+          Students who took part in the Erasmus Accreditation Mobility, 
+          Professional Education Direction demonstrated their projects 
+          they have developed as an application of the skills to work 
+          with Python programming language gained in their collaboration 
+          with Italian hosts. On their part, the students who participated 
+          in the Erasmus Accreditation mobility, the School Education Direction 
+          shared about their cooperation with teachers, students and pupils from 
+          the visiting Belgian university and school. For the audience, the meeting 
+          also had a competitive element that stimulated an in-depth perception of 
+          the opportunities that the Erasmus+ Program provides to promote international 
+          exchange in the fields of school and vocational education, with some of the 
+          students walking away with prizes.
+        </p>
+        <p>
+          The attendees were convinced of the role of the Erasmus+ 
+          Program as a continuation of the idea set 75 years ago 
+          to bring European nations closer together.
+        </p>
+        <img src="public/assets/img/europeDay_3.jpg" class="img-fluid rounded shadow mb-5" alt="Activity image">
+        <img src="public/assets/img/europeDay_4.jpg" class="img-fluid rounded shadow mb-5" alt="Activity image">
+        <img src="public/assets/img/europeDay_5.jpg" class="img-fluid rounded shadow mb-5" alt="Activity image">
+      </div>
+    </section>
+  </main>
+
+  <!-- Scripts -->
+  <script>
+    // Load navbar
+    window.addEventListener("DOMContentLoaded", () => {
+      fetch("navbar.html") // Make sure the path is correct
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById("navbar-container").innerHTML = html;
+        })
+        .catch(err => {
+          console.error("Error loading navbar:", err);
+        });
+    });
+  </script>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>This site was created by students of the PPMG for the purposes of the Erasmus + project. The European Commission is not responsible for its content.</p>
+    <p>© 2025 Erasmus+ Projects | All rights reserved</p>
+  </footer>
+
+</body>
+</html>
