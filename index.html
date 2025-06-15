@@ -25,7 +25,37 @@
     <h2 class="section-title">About the Program</h2>
     <div class="row justify-content-center text-center">
       <div class="col-lg-8">
-        <img src="public/assets/img/slider-ppmg.gif" class="img-fluid rounded mb-4" alt="Erasmus+ Program" />
+        <!-- Carousel Program -->
+        <div id="program" class="carousel slide" data-bs-ride="carousel">
+
+          <!-- Indicators/dots -->
+          <div class="carousel-indicators">
+            <button type="button" data-bs-target="#program" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#program" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#program" data-bs-slide-to="2"></button>
+          </div>
+
+          <!-- The slideshow/carousel -->
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="/public/assets/img/ppmg_front_old.png" alt="Los Angeles" class="d-block w-100">
+            </div>
+            <div class="carousel-item">
+              <img src="/public/assets/img/11.png" alt="Chicago" class="d-block w-100">
+            </div>
+            <div class="carousel-item">
+              <img src="/public/assets/img/6.png" alt="New York" class="d-block w-100">
+            </div>
+          </div>
+
+          <!-- Left and right controls/icons -->
+          <button class="carousel-control-prev" type="button" data-bs-target="#program" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#program" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+          </button>
+        </div>
         <p>
           Erasmus+ is a European Union program designed to support collaboration and 
           exchange between educational institutions across Europe and beyond. 
@@ -41,7 +71,37 @@
     <h2 class="section-title">About the School</h2>
     <div class="row justify-content-center text-center">
       <div class="col-lg-8">
-        <img src="public/assets/img/bg01.jpg" class="img-fluid rounded mb-4" alt="Erasmus+ Program" />
+        <!-- Carousel School -->
+        <div id="school" class="carousel slide" data-bs-ride="carousel">
+
+          <!-- Indicators/dots -->
+          <div class="carousel-indicators">
+            <button type="button" data-bs-target="#school" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#school" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#school" data-bs-slide-to="2"></button>
+          </div>
+
+          <!-- The slideshow/carousel -->
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="/public/assets/img/ppmg_front_old.png" alt="wtv" class="d-block w-100">
+            </div>
+            <div class="carousel-item">
+              <img src="/public/assets/img/ai_6.jpg" alt="wtv2" class="d-block w-100">
+            </div>
+            <div class="carousel-item">
+              <img src="/public/assets/img/advent_5.jpg" alt="wtv3" class="d-block w-100">
+            </div>
+          </div>
+
+          <!-- Left and right controls/icons -->
+          <button class="carousel-control-prev" type="button" data-bs-target="#school" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#school" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+          </button>
+        </div>
         <p>
           The Secondary School of Science and Mathematics "Akademician Ivan Tsenov" 
           in Vratsa is one of the leading educational institutions in Bulgaria, 
@@ -106,7 +166,7 @@
         .catch(err => {
           console.error("Error loading navbar:", err);
         });
-    });
+      });
   </script>
 
   <!-- Footer -->
@@ -114,16 +174,14 @@
     <div class="row text-center">
       <div class="col-md-6 offset-md-3">  
       <hr>
+      <img src="public/assets/img/EU_funded_logo_nobg.png" alt="Logo" class="me-2" style="height: 100px; float: left;" />
       <p style="font-size: 0.9em; color: #ffffff;">
-          Co-financed by the European Union. The European Commission's 
+          Financed by the European Union. The European Commission's 
           support for the production of this website does not constitute an 
           endorsement of the contents, which reflect the views only of the 
           authors, and the Commission cannot be held responsible for any 
           use which may be made of the information contained therein.
       </p>
-      <a class="footer-brand d-flex align-items-center offset-md-4">
-          <img src="public/assets/img/EU_funded_logo_nobg.png" alt="Logo" class="me-2" style="height: 250px;" />
-      </a>
       <p>© 2025 Erasmus+ Projects | All rights reserved</p>
       </div>
     </div>
