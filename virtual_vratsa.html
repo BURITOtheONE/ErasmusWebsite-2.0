@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Erasmus+ Project</title>
+    <icon rel="icon" href="public/assets/img/favicon.ico" type="image/x-icon" />
+    <link href="public/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <script src="public/bootstrap/js/bootstrap.bundle.min.js" defer></script>
+</head>
+<body>
+
+  <!-- Navbar will load here -->
+  <div id="navbar-container"></div>
+
+  <main class="container my-5">
+    <section class="text-center mb-5">
+      <h1 class="mb-3">Title</h1>
+    </section>
+
+    <div class="row justify-content-center mb-4">
+      <div class="col-md-4">
+        <img src="public/assets/img/virtual_vratsa_banner.png" class="img-fluid rounded shadow" alt="Activity image">
+      </div>
+    </div>
+
+    <section class="row justify-content-center">
+      <div class="col-md-8">
+        <p>
+          Students from PPMG "Acad. Ivan Tsenov" - Vratsa, members of the Erasmus+ Club with leaders Pepa Pavlova 
+          and Ani Pavlova, embarked on an unforgettable virtual journey through the natural beauty of their region. 
+          At the Knigini Center, they had the opportunity to experience Bulgaria's first-of-its-kind VR film 
+          “Destination Vratsa - Greatness and Beauty in 360°”, created on the idea of the Knigini Association 
+          and showcasing ten of the most remarkable natural landmarks in the Vratsa region. In addition, 
+          the participants enjoyed the cozy atmosphere of the café-bookstore with a charitable cause, 
+          discovering how education, culture, and innovation can intertwine in a unique shared experience.
+        </p>
+        <img src="public/assets/img/v_vratsa_2.png" class="img-fluid rounded shadow" alt="Activity image">
+        <p>
+          As part of the activity, the students were also given a creative task - to write an essay in 
+          English reflecting on their impressions of the virtual journey. These essays will be compiled 
+          and published in an e-book or another resource, allowing them to share their experiences and 
+          inspiration with a wider audience.
+        </p>
+        <img src="public/assets/img/v_vratsa_3.png" class="img-fluid rounded shadow" alt="Activity image">
+        <p>
+          This initiative is a vivid example of the mission of the Erasmus+ programme - 
+          to promote learning through innovation, cultural diversity, creativity, 
+          and cooperation, preparing young people for a more connected and responsible European future.
+        </p>
+        <a href="https://online.flippingbook.com/view/28246679/12/" class="btn btn-primary btn-lg px-4 shadow-sm mt-3">
+          Pamflet and video
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Scripts -->
+  <script>
+    // Load navbar
+    window.addEventListener("DOMContentLoaded", () => {
+      fetch("navbar.html") // Make sure the path is correct
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById("navbar-container").innerHTML = html;
+        })
+        .catch(err => {
+          console.error("Error loading navbar:", err);
+        });
+    });
+  </script>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="row text-center">
+      <div class="col-md-6 offset-md-3">  
+      <hr>
+      <img src="public/assets/img/EU_funded_logo_nobg.png" alt="Logo" class="me-2" style="height: 100px; float: left;" />
+      <p style="font-size: 0.9em; color: #ffffff;">
+          Financed by the European Union. The European Commission's 
+          support for the production of this website does not constitute an 
+          endorsement of the contents, which reflect the views only of the 
+          authors, and the Commission cannot be held responsible for any 
+          use which may be made of the information contained therein.
+      </p>
+      <p>© 2025 Erasmus+ Projects | All rights reserved</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
