@@ -92,24 +92,24 @@
             <form id="newsForm" enctype="multipart/form-data" action="/admin/news" method="POST">
                 <div class="mb-3">
                     <label for="newsTitle" class="form-label">News Title</label>
-                    <input type="text" class="form-control" id="newsTitle" placeholder="Enter news title" required>
+                    <input type="text" class="form-control" id="newsTitle" name="title" placeholder="Enter news title" required>
                 </div>
                 <div class="mb-3">
                     <label for="newsContent" class="form-label">News Content</label>
-                    <textarea class="form-control" id="newsContent" rows="4" placeholder="Enter news content" required></textarea>
+                    <textarea class="form-control" id="newsContent" name="content" rows="4" placeholder="Enter news content" required></textarea>
                 </div>
                 <div class="mb-3">
                     <label for="newsImage" class="form-label">Upload News Image</label>
-                    <input type="file" class="form-control" id="newsImage" accept="image/*" required>
+                    <input type="file" class="form-control" id="newsImage" name="newsImage" accept="image/*" required>
                     <div id="newsImagePreview" class="mt-2"></div>
                 </div>
                 <div class="mb-3">
                     <label for="newsCategory" class="form-label">Category (Optional)</label>
-                    <input type="text" class="form-control" id="newsCategory" placeholder="News Category">
+                    <input type="text" class="form-control" id="newsCategory" name="category" placeholder="News Category">
                 </div>
                 <div class="mb-3">
                     <label for="newsDate" class="form-label">Publication Date</label>
-                    <input type="date" class="form-control" id="newsDate" required>
+                    <input type="date" class="form-control" id="newsDate" name="date" required>
                 </div>
                 <button type="submit" class="btn btn-success">Add News</button>
             </form>

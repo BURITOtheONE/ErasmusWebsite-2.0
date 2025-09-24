@@ -107,15 +107,53 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("Connected to MongoDB"))
   .catch(err => console.error("Failed to connect to MongoDB", err));
 
+// Add this temporary debugging route
+app.get('/debug/projects', async (req, res) => {
+  try {
+    console.log('=== DEBUGGING PROJECTS ===');
+    
+    // Check connection
+    console.log('Database connection state:', mongoose.connection.readyState);
+    console.log('Database name:', mongoose.connection.name);
+    
+    // Count total projects
+    const count = await Project.countDocuments();
+    console.log('Total projects in database:', count);
+    
+    // Get all projects with full details
+    const projects = await Project.find();
+    console.log('Raw projects from database:', JSON.stringify(projects, null, 2));
+    
+    // Check for any validation issues
+    projects.forEach((project, index) => {
+      console.log(`Project ${index + 1}:`, {
+        id: project._id,
+        title: project.title,
+        tags: project.tags,
+        tagsType: typeof project.tags,
+        isArray: Array.isArray(project.tags)
+      });
+    });
+    
+    res.json({
+      connectionState: mongoose.connection.readyState,
+      databaseName: mongoose.connection.name,
+      totalProjects: count,
+      projects: projects
+    });
+  } catch (error) {
+    console.error('Debug error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
 
-// API to fetch projects
+// API to fetch projects - FIXED VERSION
 app.get('/api/projects', async (req, res) => {
   try {
-    const projects = await Project.find().sort({ createdAt: -1 }); // Fetch all projects from the database
+    const projects = await Project.find().sort({ createdAt: -1 });
     
     // Process each project to ensure tags are in the right format
     const processedProjects = projects.map(project => {
-      // Convert project to a regular object
       const projectObj = project.toObject();
       
       // Ensure tags is always an array
@@ -128,13 +166,14 @@ app.get('/api/projects', async (req, res) => {
       return projectObj;
     });
     
-    res.json(processedProjects); // Send the processed projects as JSON
+    res.json(processedProjects);
   } catch (error) {
     console.error('Error fetching projects:', error.message);
     res.status(500).json({ error: 'Failed to fetch projects' });
   }
 });
 
+// Server Routes
 app.get('/', (req, res) => res.render('index'));
 app.get('/about', (req, res) => res.render('about'));
 app.get('/contact', (req, res) => res.render('contact'));
@@ -243,7 +282,7 @@ app.post('/adminlogin', async (req, res) => {
   }
 });
 
-// Handle Project Upload
+// Handle Project Upload - FIXED VERSION
 app.post('/admin/project', upload.single('projectImage'), async (req, res) => {
   try {
     const { title, description, creators, websiteLink, tags, year } = req.body;
@@ -264,19 +303,29 @@ app.post('/admin/project', upload.single('projectImage'), async (req, res) => {
       }
     }
 
+    // Process tags to ensure they're stored as an array (FIXED)
+    let tagsArray = [];
+    if (tags) {
+      if (Array.isArray(tags)) {
+        tagsArray = tags;
+      } else if (typeof tags === 'string') {
+        tagsArray = tags.split(/[\s,]+/).filter(Boolean);
+      }
+    }
+
     const newProject = new Project({
       title,
       description,
       creators: creatorsArray,
-      websiteLink: websiteLink || null, // Optional field
-      tags: tags || null, // Optional field
+      websiteLink: websiteLink || '', // Changed from null to empty string
+      tags: tagsArray, // Now properly an array
       year: parseInt(year, 10) || new Date().getFullYear(),
       imageUrl,
       createdAt: new Date()
     });
 
     await newProject.save();
-    res.redirect('/admin'); // Redirect to admin panel or success page
+    res.redirect('/admin');
   } catch (error) {
     console.error('Error saving project:', error);
     res.status(400).send('Error saving project: ' + error.message);

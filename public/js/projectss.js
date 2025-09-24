@@ -1,160 +1,230 @@
-// Fix the isAdmin detection in the renderProjects function
-function renderProjects(filteredProjects) {
-    console.log("renderProjects() called with:", filteredProjects); 
+// Define missing variables at the top of the file
+let projects = []; // Store all projects
+let activeFilters = {}; // Store active filters
 
+// Define badge colors
+const BADGE_COLORS = {
+    'JavaScript': 'bg-warning',
+    'React': 'bg-info',
+    'Node.js': 'bg-success',
+    'Python': 'bg-primary',
+    'HTML': 'bg-danger',
+    'CSS': 'bg-dark',
+    'MongoDB': 'bg-success',
+    'Express': 'bg-secondary',
+    // Add more colors as needed
+};
+
+// Load projects when page loads
+document.addEventListener('DOMContentLoaded', async function() {
+    console.log('DOM loaded, fetching projects...');
+    await fetchProjects();
+});
+
+// Fetch projects from API
+async function fetchProjects() {
+    try {
+        console.log('Fetching projects from /api/projects...');
+        const response = await fetch('/api/projects');
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        projects = await response.json();
+        console.log('Projects fetched:', projects.length, 'projects');
+        console.log('Projects data:', projects);
+        
+        // Render all projects
+        renderProjects(projects);
+        
+    } catch (error) {
+        console.error('Error fetching projects:', error);
+        const container = document.getElementById('projectsContainer');
+        if (container) {
+            container.innerHTML = '<div class="col-12 text-center py-5"><h4>Error loading projects</h4><p>' + error.message + '</p></div>';
+        }
+    }
+}
+
+// Update projects based on filters
+function updateProjects() {
+    const filteredProjects = projects.filter(project => {
+        // Apply active filters
+        for (let filterTag in activeFilters) {
+            if (!project.tags.includes(filterTag)) {
+                return false;
+            }
+        }
+        return true;
+    });
+    
+    renderProjects(filteredProjects);
+}
+
+// Fixed renderProjects function
+function renderProjects(filteredProjects) {
+    console.log("=== RENDER PROJECTS DEBUG START ===");
+    console.log("renderProjects() called with:", filteredProjects); 
+    console.log("Number of projects:", filteredProjects ? filteredProjects.length : 0);
+
+    // GET the container element
+    const projectsContainer = document.getElementById('projectsContainer');
+    console.log("Container search result:", projectsContainer);
+    console.log("Container innerHTML before clear:", projectsContainer ? projectsContainer.innerHTML : "CONTAINER NOT FOUND");
+    
     if (!projectsContainer) {
         console.error("Error: projectsContainer not found in the DOM ❌");
         return;
     }
 
+    console.log("✅ Container found, clearing content...");
     projectsContainer.innerHTML = ''; // Clear previous content
+    console.log("✅ Container cleared");
 
     if (!filteredProjects || filteredProjects.length === 0) {
+        console.log("❌ No projects to render");
         projectsContainer.innerHTML = '<div class="col-12 text-center py-5"><h4>No projects found matching your criteria</h4></div>';
+        console.log("✅ No projects message added to container");
+        console.log("Container innerHTML after no projects message:", projectsContainer.innerHTML);
         return;
     }
 
-    // Modified admin check: properly handle string values
+    console.log("✅ Projects exist, starting render loop...");
+
+    // Modified admin check
     const isAdminAttr = projectsContainer.dataset.isAdmin;
     const isAdmin = isAdminAttr === 'true' || isAdminAttr === true || window.location.pathname.includes('/admin');
-    console.log("Admin status:", isAdmin, "Container dataset:", projectsContainer.dataset);
+    console.log("Admin status:", isAdmin);
 
-    filteredProjects.forEach((project) => {
-        console.log("Rendering project:", project.title);
+    // Process each project with detailed logging
+    filteredProjects.forEach((project, index) => {
+        console.log(`\n--- RENDERING PROJECT ${index + 1}/${filteredProjects.length} ---`);
+        console.log("Project data:", project);
+        console.log("Project title:", project.title);
+        console.log("Project tags:", project.tags);
+        console.log("Project tags type:", typeof project.tags);
+        console.log("Is tags array:", Array.isArray(project.tags));
 
-        // Skip projects with invalid tags
+        // Handle projects with invalid tags
         if (!project.tags || !Array.isArray(project.tags)) {
-            console.warn(`Skipping project with invalid tags:`, project);
-            return; // Skip this project if tags is not an array
+            console.warn(`⚠️ Project has invalid tags, fixing:`, project);
+            project.tags = [];
         }
 
+        console.log("✅ Creating colDiv...");
         const colDiv = document.createElement('div');
         colDiv.className = 'col-lg-4 col-md-6 mb-4';
+        console.log("✅ colDiv created:", colDiv);
 
+        console.log("✅ Creating cardDiv...");
         const cardDiv = document.createElement('div');
         cardDiv.className = 'card h-100 shadow-sm rounded-4 border-0 position-relative';
+        console.log("✅ cardDiv created:", cardDiv);
 
-        // Add delete button for admins - MODIFIED THIS PART
-        if (isAdmin) {
-            console.log("Adding delete button for project:", project.title);
-            
-            const deleteButton = document.createElement('button');
-            deleteButton.className = 'btn btn-danger btn-sm position-absolute end-0 top-0 m-2';
-            deleteButton.innerHTML = '🗑️'; // Fallback emoji
-            deleteButton.style.zIndex = '10'; // Ensure button is above other elements
-            deleteButton.setAttribute('data-project-id', project._id);
-            
-            // Make the delete button more visible for testing
-            deleteButton.style.fontSize = '16px';
-            deleteButton.style.padding = '5px 10px';
-            
-            // Add click event for delete
-            deleteButton.addEventListener('click', async function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                if (confirm('Are you sure you want to delete this project?')) {
-                    try {
-                        const response = await fetch(`/api/projects/${project._id}`, {
-                            method: 'DELETE'
-                        });
-                        
-                        if (response.ok) {
-                            // Remove the project card from the DOM
-                            colDiv.remove();
-                            // Also remove from projects array
-                            const index = projects.findIndex(p => p._id === project._id);
-                            if (index !== -1) {
-                                projects.splice(index, 1);
-                            }
-                            alert('Project deleted successfully');
-                        } else {
-                            const error = await response.text();
-                            alert(`Failed to delete project: ${error}`);
-                        }
-                    } catch (error) {
-                        console.error('Error deleting project:', error);
-                        alert('Error deleting project');
-                    }
-                }
-            });
-            
-            cardDiv.appendChild(deleteButton);
-        }
-
-        // Rest of the function remains the same...
+        // Create image
+        console.log("✅ Creating image...");
         const cardImg = document.createElement('img');
         cardImg.className = 'card-img-top p-3 rounded-5';
         cardImg.src = project.imageUrl || 'https://via.placeholder.com/300x150';
         cardImg.alt = `${project.title} image`;
-        
-        // Error handling for images
-        cardImg.onerror = function() {
-            this.onerror = null;
-            this.src = 'https://via.placeholder.com/300x150?text=No+Image';
-        };
+        console.log("✅ Image created with src:", cardImg.src);
 
+        // Create card body
+        console.log("✅ Creating card body...");
         const cardBody = document.createElement('div');
         cardBody.className = 'card-body';
 
         const title = document.createElement('h5');
         title.className = 'card-title text-primary fw-bold';
         title.textContent = project.title;
+        console.log("✅ Title created:", title.textContent);
 
         const subtitle = document.createElement('h6');
         subtitle.className = 'card-subtitle mb-2 text-muted';
         subtitle.textContent = `Year: ${project.year}`;
+        console.log("✅ Subtitle created:", subtitle.textContent);
 
         const description = document.createElement('p');
         description.className = 'card-text';
-        // Use text-truncate for long descriptions
-        if (project.description && project.description.length > 100) {
-            description.className += ' text-truncate';
-        }
         description.textContent = project.description;
+        console.log("✅ Description created");
 
+        // Create tags container
+        console.log("✅ Creating tags...");
         const badgeContainer = document.createElement('div');
         badgeContainer.className = 'mb-3';
 
-        // Process tags
-        project.tags.forEach((tag) => {
-            if (!tag) return; // Skip empty tags
-            
-            console.log("Rendering tag:", tag);
-            const badgeColor = BADGE_COLORS[tag] || 'bg-secondary';
+        // Add tags if they exist
+        if (project.tags && project.tags.length > 0) {
+            project.tags.forEach((tag, tagIndex) => {
+                if (!tag) return;
+                console.log(`  Creating tag ${tagIndex + 1}: ${tag}`);
+                
+                const tagBadge = document.createElement('span');
+                tagBadge.className = 'badge me-1 bg-secondary';
+                tagBadge.textContent = tag;
+                badgeContainer.appendChild(tagBadge);
+                console.log(`  ✅ Tag added: ${tag}`);
+            });
+        } else {
+            console.log("  No tags to add");
+        }
 
-            const tagBadge = document.createElement('span');
-            tagBadge.className = `badge me-1 clickable-badge ${badgeColor}`;
-            tagBadge.textContent = tag;
-            
-            // Add click event to filter by this tag
-            tagBadge.style.cursor = 'pointer';
-            tagBadge.onclick = () => {
-                activeFilters[tag] = tag;
-                updateProjects();
-            };
-            
-            badgeContainer.appendChild(tagBadge);
-        });
-
+        // Create view button
+        console.log("✅ Creating view button...");
         const viewButton = document.createElement('a');
-        viewButton.href = `${project.websiteLink}`;
+        viewButton.href = project.websiteLink || '#';
         viewButton.className = 'btn btn-outline-primary btn-sm';
         viewButton.textContent = 'View Project';
+        console.log("✅ View button created");
 
-        cardBody.appendChild(title);
-        cardBody.appendChild(subtitle);
-        cardBody.appendChild(description);
-        cardBody.appendChild(badgeContainer);
-        cardBody.appendChild(viewButton);
+        // Assemble the card
+        console.log("✅ Assembling card...");
+        try {
+            cardBody.appendChild(title);
+            console.log("  ✅ Title added to body");
+            
+            cardBody.appendChild(subtitle);
+            console.log("  ✅ Subtitle added to body");
+            
+            cardBody.appendChild(description);
+            console.log("  ✅ Description added to body");
+            
+            cardBody.appendChild(badgeContainer);
+            console.log("  ✅ Badge container added to body");
+            
+            cardBody.appendChild(viewButton);
+            console.log("  ✅ View button added to body");
 
-        cardDiv.appendChild(cardImg);
-        cardDiv.appendChild(cardBody);
+            cardDiv.appendChild(cardImg);
+            console.log("  ✅ Image added to card");
+            
+            cardDiv.appendChild(cardBody);
+            console.log("  ✅ Body added to card");
+            
+            colDiv.appendChild(cardDiv);
+            console.log("  ✅ Card added to column");
+            
+            console.log("✅ About to add to container...");
+            projectsContainer.appendChild(colDiv);
+            console.log("  ✅ Column added to container!");
+            
+            // Verify it was added
+            console.log("Container children count:", projectsContainer.children.length);
+            console.log("Container innerHTML length:", projectsContainer.innerHTML.length);
+            
+        } catch (error) {
+            console.error(`❌ Error assembling card for project ${index + 1}:`, error);
+            console.error("Error details:", error.stack);
+        }
 
-        colDiv.appendChild(cardDiv);
-
-        projectsContainer.appendChild(colDiv);
+        console.log(`--- PROJECT ${index + 1} RENDER COMPLETE ---\n`);
     });
 
-    console.log("renderProjects() completed ✅");
+    console.log("=== FINAL RENDER STATE ===");
+    console.log("Final container children count:", projectsContainer.children.length);
+    console.log("Final container innerHTML length:", projectsContainer.innerHTML.length);
+    console.log("Final container innerHTML preview:", projectsContainer.innerHTML.substring(0, 200) + "...");
+    console.log("=== RENDER PROJECTS DEBUG END ===");
 }
