@@ -1,4 +1,5 @@
 require('dotenv').config();
+const fs = require('fs');
 const express = require('express');
 const multer = require('multer');
 const mongoose = require('mongoose');
@@ -14,6 +15,8 @@ const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
 const bcrypt = require('bcrypt');
 const app = express();
+// add near the top with the other requires
+const validator = require('validator');
 
 // Ensure uploads directory exists
 const fs = require('fs');
@@ -69,14 +72,19 @@ app.use(
 );
 
 // Middleware
-app.use(helmet({
+/*app.use(helmet({
   contentSecurityPolicy: {
     directives: {
-      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-      "img-src": ["'self'", "data:", "https://via.placeholder.com"]
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://fonts.googleapis.com"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://use.fontawesome.com"],
+      imgSrc: ["'self'", "data:", "https://via.placeholder.com", "blob:"],
+      fontSrc: ["'self'", "https://fonts.googleapis.com", "https://fonts.gstatic.com", "https://use.fontawesome.com"],
+      connectSrc: ["'self'"]
     }
   }
-}));
+}));*/
+
 app.use(morgan('combined'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -146,7 +154,39 @@ app.get('/debug/projects', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
+// Temporary route to fix existing project tags
+app.get('/fix-project-tags', async (req, res) => {
+  try {
+    const projects = await Project.find();
+    let updatedCount = 0;
+    
+    for (let project of projects) {
+      let needsUpdate = false;
+      let newTags = [];
+      
+      if (typeof project.tags === 'string') {
+        newTags = project.tags.split(/[\s,]+/).filter(Boolean);
+        needsUpdate = true;
+      } else if (Array.isArray(project.tags)) {
+        // Check if any array elements need splitting
+        newTags = project.tags.flatMap(tag => 
+          typeof tag === 'string' ? tag.split(/[\s,]+/).filter(Boolean) : [tag]
+        );
+        needsUpdate = JSON.stringify(newTags) !== JSON.stringify(project.tags);
+      }
+      
+      if (needsUpdate) {
+        await Project.findByIdAndUpdate(project._id, { tags: newTags });
+        updatedCount++;
+        console.log(`Updated project "${project.title}" tags:`, newTags);
+      }
+    }
+    
+    res.json({ message: `Updated ${updatedCount} projects` });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 // API to fetch projects - FIXED VERSION
 app.get('/api/projects', async (req, res) => {
   try {
@@ -282,54 +322,68 @@ app.post('/adminlogin', async (req, res) => {
   }
 });
 
-// Handle Project Upload - FIXED VERSION
-app.post('/admin/project', upload.single('projectImage'), async (req, res) => {
-  try {
-    const { title, description, creators, websiteLink, tags, year } = req.body;
-    const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
-
-    // Ensure all required fields are present
-    if (!title || !description || !year) {
-      throw new Error('Title, description, and year are required fields');
-    }
-
-    // Process creators to ensure they're stored as an array
-    let creatorsArray = [];
-    if (creators) {
-      if (Array.isArray(creators)) {
-        creatorsArray = creators;
-      } else if (typeof creators === 'string') {
-        creatorsArray = creators.split(/[\s,]+/).filter(Boolean);
+// REPLACE your existing app.post('/admin/project', ...) route with this robust version
+app.post('/admin/project', (req, res) => {
+  // wrap multer so we can catch multer-specific errors before running route logic
+  upload.single('projectImage')(req, res, async (multerErr) => {
+    try {
+      if (multerErr) {
+        console.error('Multer error:', multerErr);
+        return res.status(400).send('File upload error: ' + multerErr.message);
       }
-    }
 
-    // Process tags to ensure they're stored as an array (FIXED)
-    let tagsArray = [];
-    if (tags) {
-      if (Array.isArray(tags)) {
-        tagsArray = tags;
-      } else if (typeof tags === 'string') {
-        tagsArray = tags.split(/[\s,]+/).filter(Boolean);
+      console.log('--- New project submission ---');
+      console.log('req.body:', req.body);
+      console.log('req.file:', req.file);
+
+      const { title, description, creators, websiteLink, tags, year } = req.body;
+
+      if (!title || !description || !year) {
+        return res.status(400).send('Title, description and year are required.');
       }
+
+      const parseToArray = (value) => {
+        if (!value) return [];
+        if (Array.isArray(value)) return value.map(v => String(v).trim()).filter(Boolean);
+        return String(value).split(/[\s,;,+]+/).map(s => s.trim()).filter(Boolean);
+      };
+
+      let creatorsArray = parseToArray(creators);
+      let tagsArray = parseToArray(tags);
+
+      if (creatorsArray.length === 0) creatorsArray = ['Unknown'];
+      if (tagsArray.length === 0) tagsArray = ['General'];
+
+      const yearNumber = parseInt(year, 10);
+      if (isNaN(yearNumber)) return res.status(400).send('Year must be a number.');
+
+      const website = (websiteLink && validator.isURL(websiteLink, { require_protocol: true })) ? websiteLink : '';
+
+      const imageUrl = req.file ? `/uploads/${req.file.filename}` : '';
+
+      const project = new Project({
+        title: String(title).trim(),
+        description: String(description).trim(),
+        creators: creatorsArray,
+        websiteLink: website,
+        tags: tagsArray,
+        year: yearNumber,
+        imageUrl,
+        createdAt: new Date()
+      });
+
+      await project.save();
+      console.log('Project saved:', project._id);
+      return res.redirect('/admin');
+    } catch (err) {
+      console.error('Error saving project:', err);
+      if (err.name === 'ValidationError') {
+        const msgs = Object.values(err.errors).map(e => e.message).join('; ');
+        return res.status(400).send('Validation error: ' + msgs);
+      }
+      return res.status(500).send('Internal Server Error: ' + (err.message || 'unknown'));
     }
-
-    const newProject = new Project({
-      title,
-      description,
-      creators: creatorsArray,
-      websiteLink: websiteLink || '', // Changed from null to empty string
-      tags: tagsArray, // Now properly an array
-      year: parseInt(year, 10) || new Date().getFullYear(),
-      imageUrl,
-      createdAt: new Date()
-    });
-
-    await newProject.save();
-    res.redirect('/admin');
-  } catch (error) {
-    console.error('Error saving project:', error);
-    res.status(400).send('Error saving project: ' + error.message);
-  }
+  });
 });
 
 // Handle News Upload

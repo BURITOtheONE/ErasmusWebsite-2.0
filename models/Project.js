@@ -1,34 +1,40 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 
-// Project Schema
 const projectSchema = new mongoose.Schema({
     title: {
         type: String,
-        required: true,
+        required: [true, 'Title is required'],
+        trim: true,
     },
     description: {
         type: String,
-        required: true,
+        required: [true, 'Description is required'],
+        trim: true,
     },
     creators: {
         type: [String],
-        required: true,
+        required: [true, 'Creators are required'],
+        validate: {
+            validator: arr => Array.isArray(arr) && arr.length > 0,
+            message: 'At least one creator is required'
+        }
     },
     websiteLink: {
         type: String,
         validate: {
-            validator: function(v) {
-                // Only validate if value is provided (not empty/null)
-                return !v || validator.isURL(v);
-            },
-            message: (props) => `${props.value} is not a valid URL!`,
+            validator: v => !v || validator.isURL(v),
+            message: props => `${props.value} is not a valid URL!`,
         },
-        required: false, // Changed from true to false since it's optional
+        default: ''
     },
     tags: {
-        type: [String], // Changed from String to [String] array
-        required: true,
+        type: [String],
+        required: [true, 'Tags are required'],
+        validate: {
+            validator: arr => Array.isArray(arr) && arr.length > 0,
+            message: 'At least one tag is required'
+        }
     },
     imageUrl: {
         type: String,
@@ -36,7 +42,7 @@ const projectSchema = new mongoose.Schema({
     },
     year: {
         type: Number,
-        required: true,
+        required: [true, 'Year is required'],
     },
     createdAt: {
         type: Date,
@@ -46,4 +52,5 @@ const projectSchema = new mongoose.Schema({
 
 // Create Project Model
 const Project = mongoose.model('Project', projectSchema);
+
 module.exports = Project;

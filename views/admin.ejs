@@ -69,8 +69,10 @@
                 <div class="mb-3">
                     <label for="projectImage" class="form-label">Upload Project Image</label>
                     <input type="file" class="form-control" id="projectImage" name="projectImage" accept="image/*" required>
-                    <div id="projectImagePreview" class="mt-2"></div>
-                </div>
+                    <div id="previewImage" class="mt-2">
+                        <img id="previewImgTag" style="display:none; max-width:200px;" />
+                      </div>
+                  </div>
                 <button type="submit" class="btn btn-success">Save Project</button>
             </form>
 
@@ -129,17 +131,17 @@
       const previewImage = document.getElementById('previewImage');
 
       // Preview the uploaded image
-      projectForm.projectImage.addEventListener('change', (event) => {
+        projectForm.projectImage.addEventListener('change', (event) => {
         const file = event.target.files[0];
         if (file) {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            previewImage.src = e.target.result;
-            previewImage.style.display = 'block';
-          };
-          reader.readAsDataURL(file);
-        }
-      });
+            const reader = new FileReader();
+            reader.onload = (e) => {
+            previewImgTag.src = e.target.result;
+            previewImgTag.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+            }
+        });
     });
   </script>
 </body>

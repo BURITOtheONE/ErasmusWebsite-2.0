@@ -13,6 +13,7 @@ window.addEventListener('DOMContentLoaded', event => {
 var navbarShrink = function () {
     const navbarCollapsible = document.body.querySelector('#mainNav');
     const activeLink = document.querySelector('.nav-link-active');
+    const navLinks = document.querySelectorAll('#mainNav .nav-link');
 
     if (!navbarCollapsible || !activeLink) {
         return;
@@ -22,10 +23,12 @@ var navbarShrink = function () {
         navbarCollapsible.classList.remove('navbar-shrink');
         activeLink.classList.add('link-light'); // Add Bootstrap's blue link color
         activeLink.classList.remove('link-primary'); // Remove gray link color
+        navLinks.forEach(link => link.classList.remove('no-underline'));
     } else {
         navbarCollapsible.classList.add('navbar-shrink');
         activeLink.classList.add('link-primary'); // Add Bootstrap's blue link color
         activeLink.classList.remove('link-light'); // Remove gray link color
+        navLinks.forEach(link => link.classList.add('no-underline'));
     }
 };
 

@@ -76,5 +76,87 @@
     <!-- Custom Projects Script -->
     <script src="js/scripts.js"></script>
     <script src="js/projectss.js"></script>
+
+    <!-- Add this script tag right before the closing </body> tag in your projects.ejs -->
+<script>
+    console.log('🔧 DEBUG SCRIPT STARTED');
+    console.log('Document ready state:', document.readyState);
+    
+    // Test if basic elements exist
+    function runDebugTests() {
+        console.log('🧪 === RUNNING DEBUG TESTS ===');
+        
+        // Test 1: Check if elements exist
+        const searchInput = document.getElementById('searchInput');
+        const sortOption = document.getElementById('sortOption');
+        const projectsContainer = document.getElementById('projectsContainer');
+        
+        console.log('🔍 Element check:', {
+            searchInput: !!searchInput,
+            sortOption: !!sortOption,
+            projectsContainer: !!projectsContainer
+        });
+        
+        if (searchInput) {
+            console.log('Search input found:', searchInput);
+            console.log('Search input value:', searchInput.value);
+        }
+        
+        if (sortOption) {
+            console.log('Sort option found:', sortOption);
+            console.log('Sort option value:', sortOption.value);
+        }
+        
+        if (projectsContainer) {
+            console.log('Projects container found:', projectsContainer);
+            console.log('Projects container children:', projectsContainer.children.length);
+        }
+        
+        // Test 2: Try to add a simple event listener
+        if (searchInput) {
+            console.log('🧪 Adding test event listener to search input...');
+            searchInput.addEventListener('input', function(e) {
+                console.log('🎯 TEST: Search input event fired!', e.target.value);
+            });
+            
+            // Test triggering the event
+            console.log('🧪 Triggering test search...');
+            searchInput.value = 'test';
+            searchInput.dispatchEvent(new Event('input'));
+        }
+        
+        // Test 3: Check if fetch works
+        console.log('🧪 Testing fetch to /api/projects...');
+        fetch('/api/projects')
+            .then(response => {
+                console.log('📡 Fetch response:', response.status, response.ok);
+                return response.json();
+            })
+            .then(data => {
+                console.log('📊 Fetched projects:', data.length, 'projects');
+                console.log('First project:', data[0]);
+            })
+            .catch(error => {
+                console.error('❌ Fetch error:', error);
+            });
+    }
+    
+    // Run tests when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📋 DOMContentLoaded event fired');
+            setTimeout(runDebugTests, 100);
+        });
+    } else {
+        console.log('📋 DOM already ready');
+        setTimeout(runDebugTests, 100);
+    }
+    
+    // Also run tests after a delay to be sure
+    setTimeout(function() {
+        console.log('⏰ Running delayed debug tests...');
+        runDebugTests();
+    }, 2000);
+    </script>
 </body>
 </html>

@@ -11019,14 +11019,36 @@ body {
     color: rgba(255, 255, 255, 0.5);
   }
   #mainNav .nav-link {
-    transition: none;
-    padding: 2rem 1.5rem;
-    color: rgba(255, 255, 255, 0.5);
+    position: relative;
+    transition: color 0.3s ease-in-out;
+    padding: 1rem 1.5rem;
+    color: whitesmoke;
   }
+  
+  #mainNav .nav-link::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 25%;                  /* make it shorter than full width */
+    width: 50%;                 /* adjust line length */
+    height: 2px;                /* line thickness */
+    background-color: #babbbc;  /* default underline color */
+    transition: background-color 0.3s ease-in-out;
+    opacity: 1;  /* show by default */
+  }
+
+  #mainNav .nav-link.no-underline::after {
+    opacity: 0;  /* hide when scrolled */
+  }
+
   #mainNav .nav-link:hover {
-    color: rgba(255, 255, 255, 0.75);
+    color: #64a19d;             /* text hover color */
   }
-  #mainNav .nav-link:active {
+  
+  #mainNav .nav-link:hover::after {
+    background-color: #64a19d;  /* underline matches text color */
+  }
+    #mainNav .nav-link:active {
     color: #fff;
   }
   #mainNav.navbar-shrink {
@@ -11075,16 +11097,19 @@ body {
   background-attachment: scroll;
   background-size: cover;
 }
-.masthead h1, .masthead .h1 {
-  font-family: "Varela Round", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+.masthead h1 {
   font-size: 2.5rem;
   line-height: 2.5rem;
   letter-spacing: 0.8rem;
-  background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
-  -webkit-text-fill-color: transparent;
-  -webkit-background-clip: text;
-          background-clip: text;
+  color: #fff; /* solid white */
+  
+  /* Subtle fade using mask */
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-clip: text;
+  -webkit-mask-composite: destination-in;
 }
+
 .masthead h2, .masthead .h2 {
   max-width: 20rem;
   font-size: 1rem;
