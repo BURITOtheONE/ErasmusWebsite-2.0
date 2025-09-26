@@ -190,14 +190,7 @@ function filterAndDisplayProjects() {
             const matchesCreators = creators.some(creator => creator.includes(searchTerm));
         
             return matchesTitle || matchesDescription || matchesTags || matchesCreators;
-        });
-        if (matchesTitle || matchesDescription || matchesTags || matchesCreators) {
-            console.log(`✅ "${project.title}" matched`, { matchesTitle, matchesDescription, matchesTags, matchesCreators });
-        } else {
-            console.log(`❌ "${project.title}" did not match`);
-        }
-        
-                
+        });             
         console.log('🔍 After search filter:', filteredProjects.length, 'projects');
     }
     
@@ -398,7 +391,7 @@ function renderProjects(filteredProjects) {
 
         // Create buttons container
         const buttonContainer = document.createElement('div');
-        buttonContainer.className = 'd-flex gap-2 mt-auto';
+        buttonContainer.className = 'gap-2 mt-auto';
 
         // Create view button
         if (project.websiteLink && project.websiteLink !== '') {
