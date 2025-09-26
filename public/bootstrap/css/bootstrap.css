@@ -12142,4 +12142,31 @@ img {vertical-align: middle;}
 @media only screen and (max-width: 300px) {
   .text {font-size: 11px}
 }
+
+  #google_translate_element {
+    display: inline-block;
+    padding: 5px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    border: 1px solid #ccc;
+  }
+
+  .goog-te-gadget {
+    color: #333 !important;
+  }
+
+  .goog-te-gadget .goog-te-combo {
+    padding: 4px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+
+  /* Optional: hide the powered by text */
+  .goog-logo-link,
+  .goog-te-gadget span {
+    display: none !important;
+  }
 /*# sourceMappingURL=bootstrap.css.map */
