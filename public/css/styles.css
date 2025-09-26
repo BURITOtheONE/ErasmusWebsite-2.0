@@ -11307,3 +11307,43 @@ body {
     margin-bottom: 8rem !important;
   }
 }
+
+.language-toggle-container {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.language-toggle {
+    border-radius: 25px;
+    padding: 8px 15px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+}
+
+.language-toggle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.language-toggle i {
+    margin-right: 5px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .language-toggle-container {
+        top: 80px;
+        right: 15px;
+    }
+    
+    .language-toggle {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+}

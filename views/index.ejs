@@ -21,6 +21,10 @@
         <img src="../assets/img/images.png" alt="Logo" class="img-fluid shrink-to-fit mx-3" style="max-width: 65px; max-height: 65px; z-index: 0;">
         <div class="container px-4 px-lg-5">
             <a class="navbar-brand nav-link-active" href="#page-top">PPMG 'akad. Ivan Tsenov'</a>
+
+            <!-- Translate button -->
+            <button id="translateBtn" class="btn btn-outline-light ms-2" type="button" title="Translate to Bulgarian">BG</button>
+
             <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 Menu <i class="fas fa-bars"></i>
             </button>
@@ -141,6 +145,106 @@
         <div class="container px-4 px-lg-5">Copyright &copy; PPMG 'akad. Ivan Tsenov' 2024</div>
         <a href="/admin" class="container px-4 px-lg-5 link-dark">Login as Admin</a>
     </footer>
+
+    <!-- hidden placeholder for Google Translate -->
+    <div id="google_translate_element" style="display:none;"></div>
+
+    <!-- Improved translate script (avoids re-initialization recursion / stack overflows) -->
+    <script>
+      (function () {
+        // guards to avoid repeated initialization which can cause stack overflows
+        if (window._gtSafeInit) return;
+        window._gtSafeInit = true;
+
+        // set googtrans cookie before loading script
+        function setGoogTransCookie() {
+          try {
+            var cookieName = 'googtrans';
+            var cookieValue = '/en/bg';
+            var expires = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toUTCString();
+            // simple cookie (no domain) works for localhost and normal hosts
+            document.cookie = cookieName + '=' + cookieValue + ';expires=' + expires + ';path=/';
+          } catch (e) {
+            // fail silently
+            console.error('setGoogTransCookie error', e);
+          }
+        }
+
+        // safe loader with single-load guards
+        function loadGoogleTranslateOnce() {
+          if (window._gtLoading || window._gtLoaded) return;
+          window._gtLoading = true;
+
+          // define the callback exactly once
+          window.googleTranslateElementInit = function () {
+            try {
+              // ensure we don't re-run the init function
+              if (window._gtInitCalled) return;
+              window._gtInitCalled = true;
+
+              // create the element (Google will replace it)
+              new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'bg',
+                autoDisplay: false
+              }, 'google_translate_element');
+
+              // After init, try to set the select to 'bg' (polling because the combo may appear later)
+              var attempts = 0;
+              var maxAttempts = 20;
+              var poll = setInterval(function () {
+                attempts++;
+                try {
+                  var sel = document.querySelector('select.goog-te-combo');
+                  if (sel) {
+                    sel.value = 'bg';
+                    // newer browsers may need InputEvent instead of Event
+                    var ev;
+                    try { ev = new Event('change', { bubbles: true }); } catch (e) { ev = document.createEvent('HTMLEvents'); ev.initEvent('change', true, false); }
+                    sel.dispatchEvent(ev);
+                    clearInterval(poll);
+                  } else if (attempts >= maxAttempts) {
+                    clearInterval(poll);
+                  }
+                } catch (e) {
+                  // keep polling until safe or max attempts reached
+                }
+              }, 250);
+            } catch (err) {
+              console.error('googleTranslateElementInit error', err);
+            } finally {
+              window._gtLoaded = true;
+              window._gtLoading = false;
+            }
+          };
+
+          // append script and set load handlers
+          var s = document.createElement('script');
+          s.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+          s.async = true;
+          s.onload = function () {
+            window._gtLoaded = true;
+            window._gtLoading = false;
+          };
+          s.onerror = function (e) {
+            console.error('Failed to load Google Translate script', e);
+            window._gtLoading = false;
+          };
+          document.head.appendChild(s);
+        }
+
+        // button hookup
+        var btn = document.getElementById('translateBtn');
+        if (btn) {
+          btn.addEventListener('click', function () {
+            // set cookie first then load script once
+            setGoogTransCookie();
+            loadGoogleTranslateOnce();
+          }, { passive: true });
+        }
+      })();
+    </script>
+
     <!-- Bootstrap core JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/scripts.js"></script>
