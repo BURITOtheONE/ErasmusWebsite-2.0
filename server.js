@@ -212,10 +212,58 @@ app.get('/api/projects', async (req, res) => {
   }
 });
 
+// API to fetch News
+app.get('/api/news', async (req, res) => {
+  try {
+    const News = require('./models/News'); // adjust path if needed
+    const news = await News.find().sort({ createdAt: -1 }).lean();
+
+    const processedNews = news.map(item => {
+      // Normalize tags: string -> array, ensure array
+      if (typeof item.tags === 'string') {
+        item.tags = item.tags.split(/[\s,]+/).filter(Boolean);
+      } else if (!Array.isArray(item.tags)) {
+        item.tags = [];
+      }
+
+      // Ensure a canonical 'link' field is present for client use
+      item.link = item.link || item.websiteLink || item.url || '';
+
+      return item;
+    });
+
+    res.json(processedNews);
+  } catch (error) {
+    console.error('Error fetching news:', error && error.message ? error.message : error);
+    res.status(500).json({ error: 'Failed to fetch news' });
+  }
+});
+
 // Server Routes
 app.get('/', (req, res) => res.render('index'));
 app.get('/about', (req, res) => res.render('about'));
 app.get('/contact', (req, res) => res.render('contact'));
+app.get('/news', async (req, res) => {
+  try {
+    const newsItems = await News.find().sort({ date: -1 });
+    res.render('news', { newsItems });
+  } catch (error) {
+    console.error('Error fetching news:', error.message);
+    res.status(500).send('Error fetching news');
+  }
+});
+
+// Custom project page
+app.get('/projects/:page', (req, res) => {
+  const page = req.params.page;
+  res.render(`projects/${page}`); // looks inside /views/projects/
+});
+
+// Custom news page
+app.get('/news/:page', (req, res) => {
+  const page = req.params.page;
+  res.render(`news/${page}`); // looks inside /views/news/
+});
 
 // Updated admin route with better logging and isAdmin variable
 app.get('/admin', (req, res) => {
@@ -388,7 +436,7 @@ app.post('/admin/project', (req, res) => {
 // Handle News Upload
 app.post('/admin/news', upload.single('newsImage'), async (req, res) => {
   try {
-    const { title, content, category, date } = req.body;
+    const { title, content, category, date, websiteLink } = req.body;
     const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
 
     // Validate required fields
@@ -396,12 +444,17 @@ app.post('/admin/news', upload.single('newsImage'), async (req, res) => {
       throw new Error('Title and content are required');
     }
 
+    // Validate websiteLink if provided; store canonical 'link' as well
+    const link = (websiteLink && validator.isURL(websiteLink, { require_protocol: true })) ? websiteLink : '';
+
     const newNews = new News({
       title,
       content,
       imageUrl,
       category: category || 'Uncategorized',
       date: date ? new Date(date) : new Date(),
+      websiteLink: websiteLink || '',
+      link: link // store a dedicated link field for the client
     });
 
     await newNews.save();

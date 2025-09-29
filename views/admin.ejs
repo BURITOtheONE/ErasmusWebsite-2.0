@@ -31,92 +31,223 @@
 
 <!-- Admin Panel Content -->
 <div class="container py-5">
-    <div class="card p-4">
+      <div class="card p-4">
         <h1 class="text-center">Admin Panel</h1>
+<!-- views/admin.ejs (updated form parts only; integrate into your existing admin page) -->
+<!-- Projects form (updated to allow Website Link OR Local .ejs template) -->
+<form id="projectForm" enctype="multipart/form-data" action="/admin/project" method="POST">
+  <div class="mb-3">
+    <label for="projectTitle" class="form-label">Title</label>
+    <input type="text" class="form-control" id="projectTitle" name="title" placeholder="Project Title" required>
+  </div>
 
-        <!-- Form to Edit Titles -->
-        <section class="mb-5">
-            <h2>Manage Projects</h2>
+  <div class="mb-3">
+    <label for="projectDescription" class="form-label">Description</label>
+    <textarea class="form-control" id="projectDescription" name="description" rows="3" placeholder="Project Description" required></textarea>
+  </div>
 
-            <!-- Form to Add/Update Projects -->
-            <form id="projectForm" enctype="multipart/form-data" action="/admin/project" method="POST">
-                <div class="mb-3">
-                    <label for="projectTitle" class="form-label">Title</label>
-                    <input type="text" class="form-control" id="projectTitle" name="title" placeholder="Project Title" required>
-                </div>
-                <div class="mb-3">
-                    <label for="projectDescription" class="form-label">Description</label>
-                    <textarea class="form-control" id="projectDescription" name="description" rows="3" placeholder="Project Description" required></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="projectCreators" class="form-label">Creators / Contributors</label>
-                    <p class="text text-secondary">If you want to use full names (e.g. Denislav Nikolaev Tsenov) use a "-" (Denislav-Nikolaev-Tsenov)</p>
-                    <input type="text" class="form-control" id="projectCreators" name="creators" placeholder="Creators (Separate With Spaces)" required>
-                </div>
-                <div class="mb-3">
-                    <label for="projectWebsiteLink" class="form-label">Website Link (Optional)</label>
-                    <p class="text text-secondary">If you are using a Third Party Platform for the Website (e.g. Wordpress), add the link here</p>
-                    <input type="text" class="form-control" id="projectWebsiteLink" name="websiteLink" placeholder="URL (https://example.com/your-project)">
-                </div>
-                <div class="mb-3">
-                    <label for="projectTags" class="form-label">Tags</label>
-                    <input type="text" class="form-control" id="projectTags" name="tags" placeholder="Project Tags (Separate With Spaces)" required>
-                </div>
-                <div class="mb-3">
-                    <label for="projectYear" class="form-label">Year</label>
-                    <input type="number" class="form-control" id="projectYear" name="year" placeholder="Year" required>
-                </div>
-                <div class="mb-3">
-                    <label for="projectImage" class="form-label">Upload Project Image</label>
-                    <input type="file" class="form-control" id="projectImage" name="projectImage" accept="image/*" required>
-                    <div id="previewImage" class="mt-2">
-                        <img id="previewImgTag" style="display:none; max-width:200px;" />
-                      </div>
-                  </div>
-                <button type="submit" class="btn btn-success">Save Project</button>
-            </form>
+  <div class="mb-3">
+    <label for="projectCreators" class="form-label">Creators / Contributors</label>
+    <p class="text text-secondary">If you want to use full names (e.g. Denislav Nikolaev Tsenov) use a "-" (Denislav-Nikolaev-Tsenov)</p>
+    <input type="text" class="form-control" id="projectCreators" name="creators" placeholder="Creators (Separate With Spaces)" required>
+  </div>
 
-            <!-- Projects List -->
-            <div class="container p-4">
-                <div class="card">
-                    <h2 class="mx-2">Edit Projects</h2>
-                    <!-- Projects Container -->
-                    <div id="projectsContainer" class="row gx-4 gx-lg-5" data-is-admin="<%= isAdmin %>">
-                        <!-- Projects will be dynamically loaded here -->
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Add News Section -->
-        <section>
-            <h2>Add News</h2>
-            <form id="newsForm" enctype="multipart/form-data" action="/admin/news" method="POST">
-                <div class="mb-3">
-                    <label for="newsTitle" class="form-label">News Title</label>
-                    <input type="text" class="form-control" id="newsTitle" name="title" placeholder="Enter news title" required>
-                </div>
-                <div class="mb-3">
-                    <label for="newsContent" class="form-label">News Content</label>
-                    <textarea class="form-control" id="newsContent" name="content" rows="4" placeholder="Enter news content" required></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="newsImage" class="form-label">Upload News Image</label>
-                    <input type="file" class="form-control" id="newsImage" name="newsImage" accept="image/*" required>
-                    <div id="newsImagePreview" class="mt-2"></div>
-                </div>
-                <div class="mb-3">
-                    <label for="newsCategory" class="form-label">Category (Optional)</label>
-                    <input type="text" class="form-control" id="newsCategory" name="category" placeholder="News Category">
-                </div>
-                <div class="mb-3">
-                    <label for="newsDate" class="form-label">Publication Date</label>
-                    <input type="date" class="form-control" id="newsDate" name="date" required>
-                </div>
-                <button type="submit" class="btn btn-success">Add News</button>
-            </form>
-        </section>
+  <div class="mb-3">
+    <label class="form-label">Project Link or Local View</label>
+    <div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="projectLinkMode" id="projectModeLink" value="link" checked>
+        <label class="form-check-label" for="projectModeLink">Website Link (external)</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="projectLinkMode" id="projectModeTemplate" value="template">
+        <label class="form-check-label" for="projectModeTemplate">Local .ejs template (render on server)</label>
+      </div>
     </div>
+  </div>
+
+  <div class="mb-3" id="projectWebsiteLinkWrap">
+    <label for="projectWebsiteLink" class="form-label">Website Link (Optional)</label>
+    <p class="text text-secondary">If you are using a Third Party Platform for the Website (e.g. Wordpress), add the link here</p>
+    <input type="url" class="form-control" id="projectWebsiteLink" name="websiteLink" placeholder="https://example.com/your-project">
+  </div>
+
+  <div class="mb-3 d-none" id="projectTemplateWrap">
+    <label for="projectTemplateName" class="form-label">Local template name (no path, e.g. project-custom)</label>
+    <p class="text text-secondary">Server will look for <code>views/<span id="projectTemplateExample">project-custom.ejs</span></code> when this option is used.</p>
+    <input type="text" class="form-control" id="projectTemplateName" name="templateName" placeholder="project-custom">
+  </div>
+
+  <div class="mb-3">
+    <label for="projectTags" class="form-label">Tags</label>
+    <input type="text" class="form-control" id="projectTags" name="tags" placeholder="Project Tags (Separate With Spaces)" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="projectYear" class="form-label">Year</label>
+    <input type="number" class="form-control" id="projectYear" name="year" placeholder="Year" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="projectImage" class="form-label">Upload Project Image</label>
+    <input type="file" class="form-control" id="projectImage" name="projectImage" accept="image/*" required>
+    <div id="previewImage" class="mt-2">
+      <img id="previewImgTag" style="display:none; max-width:200px;" />
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-success">Save Project</button>
+</form>
+
+<!-- News form (updated similarly) -->
+<form id="newsForm" enctype="multipart/form-data" action="/admin/news" method="POST">
+  <div class="mb-3">
+    <label for="newsTitle" class="form-label">News Title</label>
+    <input type="text" class="form-control" id="newsTitle" name="title" placeholder="Enter news title" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="newsContent" class="form-label">News Content</label>
+    <textarea class="form-control" id="newsContent" name="content" rows="4" placeholder="Enter news content" required></textarea>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">News Link or Local View</label>
+    <div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="newsLinkMode" id="newsModeLink" value="link" checked>
+        <label class="form-check-label" for="newsModeLink">Website Link (external)</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="newsLinkMode" id="newsModeTemplate" value="template">
+        <label class="form-check-label" for="newsModeTemplate">Local .ejs template (render on server)</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-3" id="newsWebsiteLinkWrap">
+    <label for="newsWebsiteLink" class="form-label">Website Link (Optional)</label>
+    <input type="url" class="form-control" id="newsWebsiteLink" name="websiteLink" placeholder="https://example.com/news-article">
+  </div>
+
+  <div class="mb-3 d-none" id="newsTemplateWrap">
+    <label for="newsTemplateName" class="form-label">Local template name (no path, e.g. news-custom)</label>
+    <p class="text text-secondary">Server will look for <code>views/<span id="newsTemplateExample">news-custom.ejs</span></code> when this option is used.</p>
+    <input type="text" class="form-control" id="newsTemplateName" name="templateName" placeholder="news-custom">
+  </div>
+
+  <div class="mb-3">
+    <label for="newsImage" class="form-label">Upload News Image</label>
+    <input type="file" class="form-control" id="newsImage" name="newsImage" accept="image/*" required>
+    <div id="newsImagePreview" class="mt-2"></div>
+  </div>
+
+  <div class="mb-3">
+    <label for="newsCategory" class="form-label">Category (Optional)</label>
+    <input type="text" class="form-control" id="newsCategory" name="category" placeholder="News Category">
+  </div>
+
+  <div class="mb-3">
+    <label for="newsDate" class="form-label">Publication Date</label>
+    <input type="date" class="form-control" id="newsDate" name="date" required>
+  </div>
+
+  <button type="submit" class="btn btn-success">Add News</button>
+</form>
+</div>
+<!-- Add this script at the end of the page (or in your js file) -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Project toggles
+  const projModeLink = document.getElementById('projectModeLink');
+  const projModeTemplate = document.getElementById('projectModeTemplate');
+  const projWebsiteWrap = document.getElementById('projectWebsiteLinkWrap');
+  const projTemplateWrap = document.getElementById('projectTemplateWrap');
+  const projTemplateInput = document.getElementById('projectTemplateName');
+
+  function updateProjectMode() {
+    if (projModeTemplate.checked) {
+      projTemplateWrap.classList.remove('d-none');
+      projTemplateInput.required = true;
+      projWebsiteWrap.classList.add('d-none');
+      document.getElementById('projectWebsiteLink').required = false;
+    } else {
+      projTemplateWrap.classList.add('d-none');
+      projTemplateInput.required = false;
+      projWebsiteWrap.classList.remove('d-none');
+      document.getElementById('projectWebsiteLink').required = false; // optional
+    }
+    // Update example display
+    document.getElementById('projectTemplateExample').textContent = (projTemplateInput.value || 'project-custom') + '.ejs';
+  }
+  projModeLink.addEventListener('change', updateProjectMode);
+  projModeTemplate.addEventListener('change', updateProjectMode);
+  projTemplateInput.addEventListener('input', () => {
+    document.getElementById('projectTemplateExample').textContent = (projTemplateInput.value || 'project-custom') + '.ejs';
+  });
+  updateProjectMode();
+
+  // News toggles
+  const newsModeLink = document.getElementById('newsModeLink');
+  const newsModeTemplate = document.getElementById('newsModeTemplate');
+  const newsWebsiteWrap = document.getElementById('newsWebsiteLinkWrap');
+  const newsTemplateWrap = document.getElementById('newsTemplateWrap');
+  const newsTemplateInput = document.getElementById('newsTemplateName');
+
+  function updateNewsMode() {
+    if (newsModeTemplate.checked) {
+      newsTemplateWrap.classList.remove('d-none');
+      newsTemplateInput.required = true;
+      newsWebsiteWrap.classList.add('d-none');
+      document.getElementById('newsWebsiteLink').required = false;
+    } else {
+      newsTemplateWrap.classList.add('d-none');
+      newsTemplateInput.required = false;
+      newsWebsiteWrap.classList.remove('d-none');
+      document.getElementById('newsWebsiteLink').required = false; // optional
+    }
+    document.getElementById('newsTemplateExample').textContent = (newsTemplateInput.value || 'news-custom') + '.ejs';
+  }
+  newsModeLink.addEventListener('change', updateNewsMode);
+  newsModeTemplate.addEventListener('change', updateNewsMode);
+  newsTemplateInput.addEventListener('input', () => {
+    document.getElementById('newsTemplateExample').textContent = (newsTemplateInput.value || 'news-custom') + '.ejs';
+  });
+  updateNewsMode();
+
+  // Image previews (project + news)
+  const previewImgTag = document.getElementById('previewImgTag');
+  const projectImageInput = document.getElementById('projectImage');
+  projectImageInput && projectImageInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        previewImgTag.src = e.target.result;
+        previewImgTag.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  const newsImageInput = document.getElementById('newsImage');
+  const newsImagePreview = document.getElementById('newsImagePreview');
+  newsImageInput && newsImageInput.addEventListener('change', (event) => {
+    newsImagePreview.innerHTML = '';
+    const file = event.target.files[0];
+    if (file) {
+      const img = document.createElement('img');
+      img.style.maxWidth = '200px';
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        img.src = e.target.result;
+        newsImagePreview.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+});
+</script>
 </div>
 
     <!-- Bootstrap JS and custom script -->

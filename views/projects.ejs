@@ -23,6 +23,7 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="/#about">About Us</a></li>
                     <li class="nav-item active"><a class="nav-link link-light nav-link-active" href="#">Erasmus+ Projects</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/news">News</a></li>
                     <li class="nav-item"><a class="nav-link" href="/#contact">Contact</a></li>
                 </ul>
             </div>
@@ -118,11 +119,6 @@
             searchInput.addEventListener('input', function(e) {
                 console.log('🎯 TEST: Search input event fired!', e.target.value);
             });
-            
-            // Test triggering the event
-            console.log('🧪 Triggering test search...');
-            searchInput.value = 'test';
-            searchInput.dispatchEvent(new Event('input'));
         }
         
         // Test 3: Check if fetch works
