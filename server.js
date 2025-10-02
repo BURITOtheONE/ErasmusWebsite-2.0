@@ -433,19 +433,27 @@ app.post('/admin/project', (req, res) => {
   });
 });
 
-// Handle News Upload
 app.post('/admin/news', upload.single('newsImage'), async (req, res) => {
   try {
-    const { title, content, category, date, websiteLink } = req.body;
-    const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
+    const { title, content, category, date, templateName, newsLinkMode } = req.body;
 
-    // Validate required fields
-    if (!title || !content) {
-      throw new Error('Title and content are required');
+    // normalize incoming link candidates
+    let extLink = (req.body.websiteLink || req.body.link || req.body.url || req.body.website || '').trim();
+    const cleanedTemplateName = (templateName || '').trim();
+
+    // build imageUrl (file required by form — keep as before)
+    const imageUrl = req.file ? `/uploads/${req.file.filename}` : '';
+
+    // basic validation
+    if (!title || !content) throw new Error('Title and content are required');
+    if (!imageUrl) throw new Error('News image is required');
+
+    if (newsLinkMode === 'template' || cleanedTemplateName) {
+      finalLink = `/News/${cleanedTemplateName}`; // e.g. GET /news/local/news-custom -> renders views/news-custom.ejs
     }
 
-    // Validate websiteLink if provided; store canonical 'link' as well
-    const link = (websiteLink && validator.isURL(websiteLink, { require_protocol: true })) ? websiteLink : '';
+    // still require a non-empty finalLink (schema is required)
+    if (!finalLink) throw new Error('A link is required (external website link or a local template name)');
 
     const newNews = new News({
       title,
@@ -453,8 +461,8 @@ app.post('/admin/news', upload.single('newsImage'), async (req, res) => {
       imageUrl,
       category: category || 'Uncategorized',
       date: date ? new Date(date) : new Date(),
-      websiteLink: websiteLink || '',
-      link: link // store a dedicated link field for the client
+      link: finalLink,
+      templateName: cleanedTemplateName
     });
 
     await newNews.save();

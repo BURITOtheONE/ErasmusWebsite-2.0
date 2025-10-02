@@ -1,30 +1,14 @@
+// models/News.js
 const mongoose = require('mongoose');
 
-// News Schema
 const newsSchema = new mongoose.Schema({
-    title: {
-        type: String,
-        required: true,
-    },
-    content: {
-        type: String,
-        required: true,
-    },
-    imageUrl: {
-        type: String, // Path to the uploaded image
-        required: true,
-    },
-    category: {
-        type: String,
-        default: '',
-    },
-    date: {
-        type: Date,
-        required: true,
-    },
+  title: { type: String, required: true },
+  content: { type: String, required: true },
+  imageUrl: { type: String, required: true }, // keep required as you wanted
+  category: { type: String, default: '' },
+  templateName: { type: String, default: '' }, // optional helper for server-rendered local pages
+  link: { type: String, required: false }, // must be provided (required)
+  date: { type: Date, required: true }
 });
 
-// Create News Model
-const News = mongoose.model('News', newsSchema);
-
-module.exports = News;
+module.exports = mongoose.model('News', newsSchema);
