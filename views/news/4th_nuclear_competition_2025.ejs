@@ -22,11 +22,11 @@
 
   <!-- Page Content -->
   <div class="container py-5">
-  <main class="container card p-5 my-5">
+  <main class="container card p-5 my-5 shadow">
     <section class="text-center mb-5">
       <h1 class="mb-3">
         GREAT ACHIEVEMENT
-        FOR PPMG "ACADEMICIAN
+        FOR PPMG "ACADEMIC
         IVAN TSENOV" IN
         THE FIELD OF NUCLEAR
         SCIENCE AND TECHNOLOGY</h1>
@@ -74,21 +74,6 @@
     </section>
   </main>
   </div>
-
-  <!-- Scripts -->
-  <script>
-    // Load navbar
-    window.addEventListener("DOMContentLoaded", () => {
-      fetch("navbar.html") // Make sure the path is correct
-        .then(res => res.text())
-        .then(html => {
-          document.getElementById("navbar-container").innerHTML = html;
-        })
-        .catch(err => {
-          console.error("Error loading navbar:", err);
-        });
-    });
-  </script>
 
       <!-- Footer-->
     <%- include('../partials/footer') %>

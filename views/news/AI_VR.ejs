@@ -38,7 +38,7 @@
           Within the framework of their professional development, 
           the teachers from PPMG "Akad Ivan Tsenov" - Vratsa, Mrs. 
           Veselka Valova, Deputy Director and Senior Mathematics Teacher, 
-          Mrs. Annie Pavlova, Senior English Teacher and Mrs. Pepa Pavlava, 
+          Mrs. Ani Pavlova, Senior English Teacher and Mrs. Pepa Pavlava, 
           Project Coordinator and Senior Physics and Astronomy Teacher, 
           took part in the trainings under the Erasmus+ program, targeting 
           STEAM - based teaching methods, as well as the application of 
@@ -101,21 +101,7 @@
   <script src="/js/scripts.js"></script>
   <script src="/js/translator.js"></script>
 
-  <script>
-    // Load navbar
-    window.addEventListener("DOMContentLoaded", () => {
-      fetch("navbar.html") // Make sure the path is correct
-        .then(res => res.text())
-        .then(html => {
-          document.getElementById("navbar-container").innerHTML = html;
-        })
-        .catch(err => {
-          console.error("Error loading navbar:", err);
-        });
-    });
-  </script>
-
-      <!-- Footer-->
+    <!-- Footer-->
     <%- include('../partials/footer') %>
 
 </body>

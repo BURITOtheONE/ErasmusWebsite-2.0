@@ -1,19 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Erasmus+ Project</title>
-    <icon rel="icon" href="../assets/img/stem/favicon.ico" type="image/x-icon" />
-    <link href="public/bootstrap/css/bootstrap.css" rel="stylesheet">
-    <script src="public/bootstrap/js/bootstrap.bundle.min.js" defer></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Erasmus+ Projects for PPMG 'akad. Ivan Tsenov' Vratsa (2024–2027)" />
+    <meta name="author" content="PPMG 'akad. Ivan Tsenov'" />
+    <title>Erasmus+ Projects | PPMG 'akad. Ivan Tsenov'</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,800,900" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="/css/styles.css" rel="stylesheet"/>
 </head>
 <body>
 
     <!-- Load Navbar From /assets/partials/navbar -->
-    <%- include('partials/navbar') %>
+    <%- include('../partials/navbar') %>
 
-  <main class="container my-5">
+  <div class="container py-5">
+  <main class="container card my-5 p-5 shadow">
     <section class="text-center mb-5">
       <h1 class="mb-3">We discover science - physical experiments without borders within the framework of mobility under the Erasmus+ Program</h1>
     </section>
@@ -103,24 +111,14 @@
       </div>
     </section>
   </main>
-
-  <!-- Scripts -->
-  <script>
-    // Load navbar
-    window.addEventListener("DOMContentLoaded", () => {
-      fetch("navbar.html") // Make sure the path is correct
-        .then(res => res.text())
-        .then(html => {
-          document.getElementById("navbar-container").innerHTML = html;
-        })
-        .catch(err => {
-          console.error("Error loading navbar:", err);
-        });
-    });
-  </script>
+</div>
+    <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/scripts.js"></script>
+  <script src="/js/translator.js"></script>
 
       <!-- Footer-->
-    <%- include('partials/footer') %>
+    <%- include('../partials/footer') %>
 
 </body>
 </html>

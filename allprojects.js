@@ -16,7 +16,7 @@
       date: "October 2024",
       location: "Angra do Heroismo, Portugal",
       category: "Teacher Training",
-      participants: "Mrs. Pepa Pavlova, Mrs. Kalina Nikolova, Mrs. Annie Pavlova",
+      participants: "Mrs. Pepa Pavlova, Mrs. Kalina Nikolova, Mrs. Ani Pavlova",
       description: "Observation of STEAM lessons and robotics club at Escola Basica Integrada de Angra do Heroismo. Activities included: ICT and computational thinking classes, robotics with Microbit sensors, Arduino smart house projects, Python and Scratch programming. Visited Science Center of Angra with experiments on sound speed, UV radiation, light spectrum, and greenhouse effect. Held lesson on ISS during International Space Week (Oct 4-10).",
       projectNumber: "2024-1-BG01-KA121-SCH-000202833"
     },
@@ -26,7 +26,7 @@
       date: "November 25-30, 2024",
       location: "Croatia (Zagreb, Split)",
       category: "Teacher Training",
-      participants: "Pepa Pavlova, Lyudmila Jenkins, Dimitrina Milcheva, Annie Pavlova",
+      participants: "Pepa Pavlova, Lyudmila Jenkins, Dimitrina Milcheva, Ani Pavlova",
       description: "Lectures and workshops on nuclear and medical physics applications. Visited: Ribro Hospital (Zagreb) - radiology and nuclear technologies; Faculty of Science and Mathematics (University of Zagreb & Split); Ruger Boskovic Institute - nuclear and medical physics research; RIT Croatia campus - interdisciplinary STEAM approach. Presented lesson 'The Northern Lights: a Fusion of Science, Myth and Magic'.",
       projectNumber: "KA-121-SCH Erasmus Accreditation"
     },
@@ -38,7 +38,7 @@
       category: "School Activity",
       participants: "Class IX students",
       leaders: "Dimitrina Milcheva (Chemistry), Maya Genkova (English)",
-      description: "Binary lesson: 'Chemistry in us and around us'. Four teams researched nutrients (carbohydrates, proteins, starch, vitamins) using chemical tests, explaining in English. Guests: Mrs. Annie Georgieva (Senior Expert), Mrs. Rosenka Kabatliiska (Language Expert), Director Mrs. Tatiana Vasileva."
+      description: "Binary lesson: 'Chemistry in us and around us'. Four teams researched nutrients (carbohydrates, proteins, starch, vitamins) using chemical tests, explaining in English. Guests: Mrs. Ani Georgieva (Senior Expert), Mrs. Rosenka Kabatliiska (Language Expert), Director Mrs. Tatiana Vasileva."
     },
     {
       id: 5,
@@ -81,7 +81,7 @@
       location: "PPMG - Vratsa",
       category: "Project-Based Learning",
       participants: "Class IX a students: Denislav Tsenov, Martin Petkov (programmers), Raya Stancheva, Desislava Dinkova (content)",
-      leaders: "Annie Pavlova (English Teacher)",
+      leaders: "Ani Pavlova (English Teacher)",
       description: "Open lesson combining English and computer science. Created interactive electronic Advent calendar with STEM themes using JavaScript, CSS, HTML. Content: famous scientists facts, at-home experiments, quizzes, educational videos. Published on GitHub with MIT license. Guests from grades VIII b and XI a participated.",
       projectNumber: "2024-1-BG01-KA121-SCH-000202833"
     },
@@ -91,7 +91,7 @@
       date: "2024",
       location: "Tallinn, Estonia",
       category: "Teacher Training",
-      participants: "Mrs. Veselka Valova (Deputy Director), Mrs. Annie Pavlova, Mrs. Pepa Pavlova",
+      participants: "Mrs. Veselka Valova (Deputy Director), Mrs. Ani Pavlova, Mrs. Pepa Pavlova",
       description: "STEAM-based teaching methods training focusing on interdisciplinary, project-based learning. AI and VR in language learning - adaptive systems, immediate feedback, realistic virtual environments. Visited Ehte Humanitaargumnaasium High School. Result: Electronic handbook with lesson plans for school e-library and website.",
       projectNumber: "2024-1-BG01-KA121-SCH-000202833"
     },
