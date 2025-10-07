@@ -18,27 +18,8 @@
 </head>
 <body style="padding-top: 72px;"> <!-- padding to avoid fixed-top navbar overlap -->
 
-    <!-- Navigation-->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
-        <div class="container px-4 px-lg-5">
-            <a class="navbar-brand nav-link-active" href="#page-top">PPMG 'akad. Ivan Tsenov'</a>
-
-            <!-- Translate button -->
-            <button id="translateBtn" class="btn btn-outline-light ms-2" type="button" title="Translate to Bulgarian">BG</button>
-
-            <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                Menu <i class="fas fa-bars"></i>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#projects">Erasmus+ Projects</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/news">News</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <!-- Load Navbar From /assets/partials/navbar -->
+    <%- include('partials/navbar') %>
 
   <!-- Main content -->
   <main class="container py-5">
@@ -104,11 +85,21 @@
     <div id="errorPlaceholder" style="display:none;"></div>
   </main>
 
+      <!-- Footer-->
+    <%- include('partials/footer') %>
+    <!-- hidden placeholder for Google Translate -->
+    <div id="google_translate_element" style="display:none;"></div>
+
+  <!-- ----------------------- -->
+  <!--   Custom Scripts Here   -->
+  <!-- ----------------------- -->
+
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Your news script (make sure path is correct: /js/scripts.js) -->
+  <!-- News script (using absolute path: /js/scripts.js) -->
   <script src="/js/scripts.js" defer></script>
   <script src="/js/news.js" defer></script>
+  <script src="/js/translator.js"></script>
+
 </body>
 </html>

@@ -369,7 +369,6 @@ app.post('/adminlogin', async (req, res) => {
   }
 });
 
-// REPLACE your existing app.post('/admin/project', ...) route with this robust version
 app.post('/admin/project', (req, res) => {
   // wrap multer so we can catch multer-specific errors before running route logic
   upload.single('projectImage')(req, res, async (multerErr) => {
@@ -383,7 +382,7 @@ app.post('/admin/project', (req, res) => {
       console.log('req.body:', req.body);
       console.log('req.file:', req.file);
 
-      const { title, description, creators, websiteLink, tags, year } = req.body;
+      const { title, description, creators, websiteLink, templateName, tags, year } = req.body;
 
       if (!title || !description || !year) {
         return res.status(400).send('Title, description and year are required.');
@@ -404,7 +403,30 @@ app.post('/admin/project', (req, res) => {
       const yearNumber = parseInt(year, 10);
       if (isNaN(yearNumber)) return res.status(400).send('Year must be a number.');
 
-      const website = (websiteLink && validator.isURL(websiteLink, { require_protocol: true })) ? websiteLink : '';
+      // --- link/template resolution for projects ---
+      const extLink = (websiteLink || '').trim();
+      const cleanedTemplateName = (templateName || '').trim();
+
+      let finalLink = '';
+      if (cleanedTemplateName) {
+        const templatePathProjects = path.join(__dirname, 'views', 'projects', `${cleanedTemplateName}.ejs`);
+        const templatePathNews = path.join(__dirname, 'views', 'news', `${cleanedTemplateName}.ejs`);
+        if (fs.existsSync(templatePathProjects)) {
+          finalLink = `/projects/${cleanedTemplateName}`;
+        } else if (fs.existsSync(templatePathNews)) {
+          finalLink = `/news/${cleanedTemplateName}`;
+        } else {
+          return res.status(400).send('Template not found: ' + cleanedTemplateName);
+        }
+      } else if (extLink) {
+        if (validator.isURL(extLink, { require_protocol: true })) {
+          finalLink = extLink;
+        } else {
+          return res.status(400).send('Invalid external URL');
+        }
+      } else {
+        return res.status(400).send('A link is required (external website link or a local template name)');
+      }
 
       const imageUrl = req.file ? `/uploads/${req.file.filename}` : '';
 
@@ -412,7 +434,7 @@ app.post('/admin/project', (req, res) => {
         title: String(title).trim(),
         description: String(description).trim(),
         creators: creatorsArray,
-        websiteLink: website,
+        websiteLink: finalLink,
         tags: tagsArray,
         year: yearNumber,
         imageUrl,
@@ -449,7 +471,7 @@ app.post('/admin/news', upload.single('newsImage'), async (req, res) => {
     if (!imageUrl) throw new Error('News image is required');
 
     if (newsLinkMode === 'template' || cleanedTemplateName) {
-      finalLink = `/News/${cleanedTemplateName}`; // e.g. GET /news/local/news-custom -> renders views/news-custom.ejs
+      finalLink = `/news/${cleanedTemplateName}`; // e.g. GET /news/local/news-custom -> renders views/news-custom.ejs
     }
 
     // still require a non-empty finalLink (schema is required)

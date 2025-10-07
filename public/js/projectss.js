@@ -394,9 +394,9 @@ function renderProjects(filteredProjects) {
         buttonContainer.className = 'gap-2 mt-auto';
 
         // Create view button
-        if (project.websiteLink && project.websiteLink !== '') {
+        if (project.websiteLink || project.websiteLink || project.Link !== '') {
             const viewButton = document.createElement('a');
-            viewButton.href = project.websiteLink;
+            viewButton.href = project.websiteLink || project.link;
             viewButton.className = 'btn btn-outline-primary btn-sm';
             viewButton.innerHTML = '<i class="fas fa-external-link-alt"></i> View Project';
             viewButton.target = '_blank';

@@ -22,10 +22,6 @@ const projectSchema = new mongoose.Schema({
     },
     websiteLink: {
         type: String,
-        validate: {
-            validator: v => !v || validator.isURL(v),
-            message: props => `${props.value} is not a valid URL!`,
-        },
         default: ''
     },
     tags: {

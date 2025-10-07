@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Erasmus+ Projects for PPMG 'akad. Ivan Tsenov' Vratsa (2024–2027)" />
+    <meta name="author" content="PPMG 'akad. Ivan Tsenov'" />
+    <title>Erasmus+ Projects | PPMG 'akad. Ivan Tsenov'</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,800,900" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="/css/styles.css" rel="stylesheet"/>
+</head>
+<body>
+
+    <!-- Load Navbar From /assets/partials/navbar -->
+    <%- include('../partials/navbar') %>
+
+  <!-- Page Content -->
+  <div class="container py-5">
+  <main class="container card p-5 my-5">
+    <section class="text-center mb-5">
+      <h1 class="mb-3">
+        GREAT ACHIEVEMENT
+        FOR PPMG "ACADEMICIAN
+        IVAN TSENOV" IN
+        THE FIELD OF NUCLEAR
+        SCIENCE AND TECHNOLOGY</h1>
+    </section>
+
+    <div class="row justify-content-center mb-4">
+      <div class="col-md-4">
+        <img src="../assets/img/stem/4th_nuclear_competition_2025_banner.png" class="img-fluid rounded shadow" alt="Activity image">
+      </div>
+    </div>
+
+    <section class="row justify-content-center">
+      <div class="col-md-8">
+        <p>
+          We are pleased to announce that two teams from the "Acad. Ivan Tsenov" Secondary School - Vratsa have qualified
+          among the 15 finalists of the prestigious European competition ENEN Secondary School
+          Competition 2025, organized by the European Nuclear Education Network (ENEN)
+          as part of the ENEN2plus project.
+        </p>
+        <p>
+          This year's competition featured 132 teams from 17 countries. 
+          The task was to create a 3- to 4-minute video presenting an application of nuclear science, 
+          from energy production and radiation protection to medical technology and space exploration.
+        </p>
+        <p>
+          The teams including students: Katerina Getova, Yoana Yordanova, Tsvetelina Tsonkova and Martin Andreev 
+          impressed the international jury with their innovative ideas and creativity, which secured them a place among the finalists.
+        </p>
+        <p>
+          Under the leadership of Ms. Pepa Pavlova and Ms. Ani Pavlova, 
+          they will represent Bulgaria at the final competition and science camp, 
+          which will be held from July 14 to 18, 2025 in Bologna, Italy.
+        </p>
+        <p>
+          This success is also closely related to the active work of the high school under project No. 2024-1-
+          BG01-KA121-SCH-000202833, in connection with the Erasmus Accreditation for School Education KA-121-SCH, 
+          aimed at promoting STEM education and international cooperation. Participation in such initiatives creates 
+          a solid foundation for the development of scientific culture and innovative thinking in our students.
+        </p>
+        <p>
+          We congratulate the students and their teachers on this exceptional success 
+          and wish them inspiration and excellent results in the final stage!
+        </p>
+      </div>
+    </section>
+  </main>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    // Load navbar
+    window.addEventListener("DOMContentLoaded", () => {
+      fetch("navbar.html") // Make sure the path is correct
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById("navbar-container").innerHTML = html;
+        })
+        .catch(err => {
+          console.error("Error loading navbar:", err);
+        });
+    });
+  </script>
+
+      <!-- Footer-->
+    <%- include('../partials/footer') %>
+
+        <!-- Bootstrap core JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/scripts.js"></script>
+    <script src="/js/translator.js"></script>
+    <script src="/js/latestNewsLoader.js"></script>
+</body>
+</html>

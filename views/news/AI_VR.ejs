@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Erasmus+ Projects for PPMG 'akad. Ivan Tsenov' Vratsa (2024–2027)" />
+    <meta name="author" content="PPMG 'akad. Ivan Tsenov'" />
+    <title>Erasmus+ Projects | PPMG 'akad. Ivan Tsenov'</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,800,900" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="/css/styles.css" rel="stylesheet"/>
+</head>
+<body>
+
+    <!-- Load Navbar From /assets/partials/navbar -->
+    <%- include('../partials/navbar') %>
+
+  <main class="container py-4 my-5">
+    <div class="card my-5 p-5 py-5 shadow">
+      <section class="text-center mb-5">
+      <h1 class="mb-3">"STEAM - Based Teaching" and "Artificial Intelligence and Virtual Reality in Language Learning" - Participation of Teachers in Erasmus+ Program Courses</h1>
+    </section>
+
+    <div class="row justify-content-center mb-4">
+      <div class="col-md-4">
+        <img src="../assets/img/stem/ai_1.jpg" class="img-fluid rounded shadow" alt="Activity image">
+      </div>
+    </div>
+
+    <section class="row justify-content-center">
+      <div class="col-md-8">
+        <p>
+          Within the framework of their professional development, 
+          the teachers from PPMG "Akad Ivan Tsenov" - Vratsa, Mrs. 
+          Veselka Valova, Deputy Director and Senior Mathematics Teacher, 
+          Mrs. Annie Pavlova, Senior English Teacher and Mrs. Pepa Pavlava, 
+          Project Coordinator and Senior Physics and Astronomy Teacher, 
+          took part in the trainings under the Erasmus+ program, targeting 
+          STEAM - based teaching methods, as well as the application of 
+          artificial intelligence (AI) and virtual reality (VR) in 
+          language learning. These international courses were held 
+          in Tallinn, Estonia in implementation of Project No. 
+          2024-1-BG01-KA121-SCH-000202833 on Erasmus Accreditation for 
+          School Education KA-121-SCH. The training has provided a valuable 
+          opportunity to refine teaching practices, enhance digital competencies 
+          and apply innovative pedagogical approaches.
+        </p>
+        <img src="../assets/img/stem/ai_2.jpg" class="img-fluid rounded shadow" alt="Activity image">
+        <p>
+          STEAM-related modules (Science, Technology, Engineering, Arts, and Mathematics) focused 
+          on interdisciplinary, project-based learning that encourages creativity, collaboration 
+          and critical thinking among students. Teachers had the opportunity to try hands-on 
+          activities and digital tools supporting STEAM principles, as well as exchange 
+          experiences with colleagues from other European countries.
+        </p>
+        <img src="../assets/img/stem/ai_3.jpg" class="img-fluid rounded shadow" alt="Activity image">
+        <p>
+          AI and VR training introduced participants to the latest technologies that transform 
+          language learning into an interactive and personalised process. Artificial intelligence 
+          tools demonstrated how adaptive systems can meet students’ individual needs and provide 
+          immediate feedback, while VR has created opportunities to practice language skills in a 
+          realistic virtual environment.
+        </p>
+        <img src="../assets/img/stem/ai_4.jpg" class="img-fluid rounded shadow" alt="Activity image">
+        <p>
+          Teachers worked in teams and, alongside their peers, discussed the challenges and 
+          benefits of using the STEAM approach in education, shared their experiences and 
+          perspectives on integrating AI and VR in the education process, and explored potential 
+          strategies for introducing these technologies into the classroom. As a result of working 
+          together, the teams developed lesson plans based on the idea of using modern technology 
+          in the learning environment.
+        </p>
+        <img src="../assets/img/stem/ai_5.jpg" class="img-fluid rounded shadow" alt="Activity image">
+        <p>
+          Course participants got acquainted with the specifics of the Estonian education system 
+          and visited the Ehte Humanitaargumnaasium High School, where their Estonian colleagues 
+          shared their intelligent solutions for educational innovation.
+        </p>
+        <img src="../assets/img/stem/ai_6.jpg" class="img-fluid rounded shadow" alt="Activity image">
+        <p>
+          Participation in the Erasmus + courses contributed significantly to the professional 
+          growth of teachers and the modernization of the learning process in their educational 
+          institution. The knowledge and experience gained will be used to create a more engaging, 
+          inclusive and future-oriented learning environment for students. An electronic handbook 
+          for teachers, including the developed lesson plans, is about to be issued, which will be 
+          available in the school's e-library and published on the PPMG - Vratsa website.
+        </p>
+        <a href="https://online.fliphtml5.com/ottbc/eenr/" target="_blank" class="btn btn-primary mb-3">View the Guidebook</a>
+      </div>
+    </section>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/scripts.js"></script>
+  <script src="/js/translator.js"></script>
+
+  <script>
+    // Load navbar
+    window.addEventListener("DOMContentLoaded", () => {
+      fetch("navbar.html") // Make sure the path is correct
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById("navbar-container").innerHTML = html;
+        })
+        .catch(err => {
+          console.error("Error loading navbar:", err);
+        });
+    });
+  </script>
+
+      <!-- Footer-->
+    <%- include('../partials/footer') %>
+
+</body>
+</html>
