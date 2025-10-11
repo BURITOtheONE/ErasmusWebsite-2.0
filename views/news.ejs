@@ -18,9 +18,29 @@
 </head>
 <body style="padding-top: 72px;"> <!-- padding to avoid fixed-top navbar overlap -->
 
-    <!-- Load Navbar From /assets/partials/navbar -->
-    <%- include('partials/navbar') %>
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+        <img src="../assets/img/logo.png" alt="Logo" class="img-fluid shrink-to-fit mx-3" style="max-width: 65px; max-height: 65px; z-index: 0;">
+        <div class="container px-4 px-lg-5">
+            <a class="navbar-brand nav-link-active link-primary" style="color: #64a19d !important;" href="/#page-top">PPMG 'akad. Ivan Tsenov'</a>
 
+            <!-- Translate button -->
+            <button id="translateBtn" class="btn btn-sm btn-primary p-3 px-4 m-3" type="button" title="Translate to Bulgarian">BG</button>
+
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                Menu <i class="fas fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/about">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/projects">Erasmus+ Projects</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/news">News</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
   <!-- Main content -->
   <main class="container py-5">
     <h1 class="text-center mb-4">Latest News</h1>

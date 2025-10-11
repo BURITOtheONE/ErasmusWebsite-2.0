@@ -17,24 +17,73 @@
 </head>
 <body id="page-top">
 
-    <!-- Navigation-->
+    <style>
+        /* Light mode (default / no-preference):
+           - when NOT scrolled (no .navbar-shrink): white links
+           - when scrolled (.navbar-shrink): dark links
+        */
+        @media (prefers-color-scheme: light), (prefers-color-scheme: no-preference) {
+            #mainNav:not(.navbar-shrink) {
+                background-color: rgba(33, 37, 41, 0.7) !important;
+            }
+
+            #mainNav:not(.navbar-shrink) .navbar-nav .nav-link,
+            #mainNav:not(.navbar-shrink) .navbar-brand {
+                color: #fff !important;
+            }
+
+            #mainNav.navbar-shrink {
+                background-color: #e9ecef !important;
+            }
+
+            #mainNav.navbar-shrink .navbar-nav .nav-link,
+            #mainNav.navbar-shrink .navbar-brand {
+                color: #000 !important;
+            }
+        }
+
+        /* Dark mode:
+           - always light links (do not change on scroll)
+        */
+        @media (prefers-color-scheme: dark) {
+            #mainNav,
+            #mainNav:not(.navbar-shrink),
+            #mainNav.navbar-shrink {
+                /* keep existing backgrounds — adjust if you want different dark-mode background */
+                background-color: rgba(33, 37, 41, 0.7) !important;
+            }
+
+            /* ensure link color stays light regardless of .navbar-shrink or JS-added classes */
+            #mainNav .navbar-nav .nav-link,
+            #mainNav .navbar-brand {
+                color: #fff !important;
+            }
+        }
+
+        /* Fallback for user agents without prefers-color-scheme support:
+           behave like light-mode rules above */
+        @media (prefers-color-scheme: no-preference) {
+            /* handled in the light/no-preference block above */
+        }
+    </style>
+        <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
         <img src="../assets/img/logo.png" alt="Logo" class="img-fluid shrink-to-fit mx-3" style="max-width: 65px; max-height: 65px; z-index: 0;">
         <div class="container px-4 px-lg-5">
             <a class="navbar-brand nav-link-active" href="/#page-top">PPMG 'akad. Ivan Tsenov'</a>
 
             <!-- Translate button -->
-            <button id="translateBtn" class="btn btn-outline-light ms-2" type="button" title="Translate to Bulgarian">BG</button>
+            <button id="translateBtn" class="btn btn-sm btn-primary p-3 px-4 m-3 ms-2" type="button" title="Translate to Bulgarian">BG</button>
 
             <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 Menu <i class="fas fa-bars"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#projects">Erasmus+ Projects</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#news">News</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link adaptive-text-index" href="#about">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link adaptive-text-index" href="#projects">Erasmus+ Projects</a></li>
+                    <li class="nav-item"><a class="nav-link adaptive-text-index" href="#news">News</a></li>
+                    <li class="nav-item"><a class="nav-link adaptive-text-index" href="#contact">Contact</a></li>
                 </ul>
             </div>
         </div>
@@ -79,11 +128,11 @@
     </div>
 </section>
     <!-- Projects-->
-    <section class="projects-section bg-light" id="projects">
+    <section class="projects-section" id="projects">
         <div class="container px-4 px-lg-5">
             <div class="text-center mb-5">
-                <h2 class="text-black mb-4">Erasmus+ Projects (2024–2027)</h2>
-                <p class="text-black-50">Explore our exciting projects and collaborations with schools across Europe.</p>
+                <h2 class="adaptive-text mb-4">Erasmus+ Projects (2024–2027)</h2>
+                <p class="adaptive-text-50">Explore our exciting projects and collaborations with schools across Europe.</p>
             </div>
             <!-- Project Cards-->
             <div class="row">
@@ -91,8 +140,11 @@
                     <div class="card">
                         <img class="card-img-top" src="assets/img/project1.jpg" alt="Project 1">
                         <div class="card-body">
-                            <h4 class="card-title">Project Title 1</h4>
-                            <p class="card-text">A brief description of this project's goals, participants, and outcomes.</p>
+                            <h4 class="adaptive-text">STEM-Themed Christmas Advent Calendar</h4>
+                            <p class="adaptive-text">Senior English Teacher Ani Pavlova led IX a class of PPMG - Vratsa in a project-based lesson. Students created a "STEM-themed Advent Calendar," an electronic version of the traditional Christmas countdown, combining computer science and English skills while promoting STEM learning and creativity.</p>
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <a href="/news/advent_calendar" class="btn btn-primary btn-sm">Read more</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -100,8 +152,11 @@
                     <div class="card">
                         <img class="card-img-top" src="assets/img/project2.jpg" alt="Project 2">
                         <div class="card-body">
-                            <h4 class="card-title">Project Title 2</h4>
-                            <p class="card-text">A brief description of this project's goals, participants, and outcomes.</p>
+                            <h4 class="card-title">Exhibition Honors Women Scientists on International Recognition Day</h4>
+                            <p class="card-text">Female students from the Erasmus+ Club created nine posters highlighting the achievements of world-renowned and Bulgarian women scientists, promoting gender equality in STEM fields.</p>
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <a href="/news/women_in_science" class="btn btn-primary btn-sm">Read more</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -119,11 +174,11 @@
              - date: Date object
              - slug: string (for URL)
         -->
-        <section class="news-section bg-white py-5" id="news">
+        <section class="news-section py-5" id="news">
         <div class="container px-4 px-lg-5">
             <div class="text-center mb-4">
-            <h2 class="text-black mb-3">Latest News</h2>
-            <p class="text-black-50">Stay up to date with our latest announcements and events.</p>
+            <h2 class="adaptive-text mb-3">Latest News</h2>
+            <p class="adaptive-text-50">Stay up to date with our latest announcements and events.</p>
             </div>
 
             <div class="row">
@@ -150,7 +205,7 @@
                                 <i class="fas fa-map-marker-alt text-primary mb-2"></i>
                                 <h4 class="text-uppercase m-0">Location</h4>
                                 <hr class="my-4 mx-auto" />
-                                <div class="small text-black-50">PPMG "akad. Ivan Tsenov" Vratsa</div>
+                                <div class="small footer-text">PPMG "akad. Ivan Tsenov" Vratsa</div>
                             </div>
                         </div>
                     </div>
@@ -171,7 +226,7 @@
                                 <h4 class="text-uppercase m-0">Phone</h4>
                                 <hr class="my-4 mx-auto" />
                                 <div 
-                                class="small text-black-50 "            
+                                class="small footer-text "            
                                 id="copyText" 
                                 class="text-primary text-decoration-underline" 
                                 style="cursor: pointer;" 

@@ -4235,7 +4235,7 @@ textarea.form-control-lg {
   --bs-card-cap-color: ;
   --bs-card-height: ;
   --bs-card-color: ;
-  --bs-card-bg: #fff;
+  --bs-card-bg: var(--card-body);
   --bs-card-img-overlay-padding: 1rem;
   --bs-card-group-margin: 0.75rem;
   position: relative;
@@ -4248,6 +4248,7 @@ textarea.form-control-lg {
   background-clip: border-box;
   border: var(--bs-card-border-width) solid var(--bs-card-border-color);
   border-radius: var(--bs-card-border-radius);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .card > hr {
   margin-right: 0;
@@ -6863,13 +6864,13 @@ textarea.form-control-lg {
 .link-danger:hover, .link-danger:focus {
   color: #815053 !important;
 }
-
+/* GO TO .link-light-new IF YOU WANT LIGHT LINKS
 .link-light {
   color: #f8f9fa !important;
 }
 .link-light:hover, .link-light:focus {
   color: #f9fafb !important;
-}
+}*/
 
 .link-dark {
   color: #212529 !important;
@@ -10971,29 +10972,83 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+:root {
+  /* Light mode colors */
+  --bg-body: #fff;
+  --card-body: #f8f9fa;
+  --text-primary: #000;
+  --text-primary-50: rgba(0, 0, 0, 0.55); /* 55% black for subtle contrast */  
+  --text-primary-index: #fafafa;
+  --text-secondary: #212529;
+  --nav-bg: #fff;
+  --nav-bg-transparent: transparent;
+  --nav-bg-shrink: #f0f3f6; /* light gray when scrolled */
+  --nav-text: #212529; /* darker text, visible on white */
+  --nav-text-shrink: #212529;
+  --nav-brand: #000;
+  --nav-brand-transparent: rgba(0, 0, 0, 0.5);
+  --card-bg: #fff;
+  --card-text: #212529;
+  --social-bg: rgba(255, 255, 255, 0.1);
+  --social-color: rgba(255, 255, 255, 0.3);
+  --social-hover: rgba(255, 255, 255, 0.5);
+  --accent-color: #64a19d;
+  --border-color: #64a19d;
+  --underline-color: #babbbc;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark mode colors */
+    --bg-body: #1a1a1a;
+    --card-body: #2c3034;
+    --text-primary: #e0e0e0;
+    --text-primary-50: rgba(255, 255, 255, 0.6); /* 60% white for readability */
+    --text-primary-index: #e0e0e0;
+    --text-secondary: #b0b0b0;
+    --nav-bg: rgb(29, 29, 39);
+    --nav-bg-transparent: transparent;
+    --nav-bg-shrink: rgb(29, 29, 39);
+    --nav-text: #e0e0e0;
+    --nav-text-shrink: #e0e0e0;
+    --nav-brand: #e0e0e0;
+    --nav-brand-transparent: rgba(255, 255, 255, 0.7);
+    --card-bg: #2c3034;
+    --card-text: #e0e0e0;
+    --social-bg: rgba(255, 255, 255, 0.05);
+    --social-color: rgba(255, 255, 255, 0.4);
+    --social-hover: rgba(255, 255, 255, 0.7);
+    --accent-color: #64a19d;
+    --border-color: #64a19d;
+    --underline-color: #808080;
+  }
+}
+
 html {
   scroll-padding-top: calc(4.5rem - 1px);
 }
 
 body {
   letter-spacing: 0.0625em;
+  background-color: var(--bg-body);
+  color: var(--text-primary);
 }
 
 #mainNav {
   min-height: 3.5rem;
-  background-color: #fff;
+  background-color: var(--nav-bg);
 }
 #mainNav .navbar-toggler {
   font-size: 80%;
   padding: 0.75rem;
-  color: #64a19d;
-  border: 1px solid #64a19d;
+  color: var(--accent-color);
+  border: 1px solid var(--accent-color);
 }
 #mainNav .navbar-toggler:focus {
   outline: none;
 }
 #mainNav .navbar-brand {
-  color: #000;
+  color: var(--nav-brand);
   font-weight: 700;
   padding: 0.9rem 0;
 }
@@ -11011,18 +11066,18 @@ body {
     padding-top: 0;
     padding-bottom: 0;
     border-bottom: none;
-    background-color: transparent;
+    background-color: var(--nav-bg-transparent);
     transition: background-color 0.3s ease-in-out;
   }
   #mainNav .navbar-brand {
     padding: 0.5rem 0;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--nav-brand-transparent);
   }
   #mainNav .nav-link {
     position: relative;
     transition: color 0.3s ease-in-out;
     padding: 1rem 1.5rem;
-    color: whitesmoke;
+    color: var(--nav-text);
   }
   
   #mainNav .nav-link::after {
@@ -11032,7 +11087,7 @@ body {
     left: 25%;                  /* make it shorter than full width */
     width: 50%;                 /* adjust line length */
     height: 2px;                /* line thickness */
-    background-color: #babbbc;  /* default underline color */
+    background-color: var(--underline-color);  /* default underline color */
     transition: background-color 0.3s ease-in-out;
     opacity: 1;  /* show by default */
   }
@@ -11042,36 +11097,36 @@ body {
   }
 
   #mainNav .nav-link:hover {
-    color: #64a19d;             /* text hover color */
+    color: var(--accent-color);             /* text hover color */
   }
   
   #mainNav .nav-link:hover::after {
-    background-color: #64a19d;  /* underline matches text color */
+    background-color: var(--accent-color);  /* underline matches text color */
   }
     #mainNav .nav-link:active {
     color: #fff;
   }
   #mainNav.navbar-shrink {
-  background-color:rgb(29, 29, 39);
+  background-color: var(--nav-bg-shrink);
   }
   #mainNav.navbar-shrink .navbar-brand {
-    color: #000;
+    color: var(--nav-brand-shrink);
   }
   #mainNav.navbar-shrink .nav-link {
-    color: #000;
+    color: var(--nav-text-shrink);
     padding: 1.5rem 1.5rem 1.25rem;
     border-bottom: 0.25rem solid transparent;
   }
   #mainNav.navbar-shrink .nav-link:hover {
-    color: #64a19d;
+    color: var(--accent-color);
   }
   #mainNav.navbar-shrink .nav-link:active {
     color: #467370;
   }
   #mainNav.navbar-shrink .nav-link.active {
-    color: #64a19d;
+    color: var(--accent-color);
     outline: none;
-    border-bottom: 0.25rem solid #64a19d;
+    border-bottom: 0.25rem solid var(--accent-color);
   }
 }
 
@@ -11146,6 +11201,7 @@ body {
 
 .projects-section {
   padding: 10rem 0;
+  background-color: var(--bg-body);
 }
 .projects-section .featured-text {
   padding: 2rem;
@@ -11153,7 +11209,7 @@ body {
 @media (min-width: 992px) {
   .projects-section .featured-text {
     padding: 0 0 0 2rem;
-    border-left: 0.5rem solid #64a19d;
+    border-left: 0.5rem solid var(--accent-color);
   }
 }
 .projects-section .project-text {
@@ -11187,10 +11243,13 @@ body {
 
 .contact-section {
   padding-top: 5rem;
+  background-color: var(--bg-body);
 }
 .contact-section .card {
   border: 0;
-  border-bottom: 0.25rem solid #64a19d;
+  border-bottom: 0.25rem solid var(--border-color);
+  background-color: var(--card-bg);
+  color: var(--card-text);
 }
 .contact-section .card h4, .contact-section .card .h4 {
   font-size: 0.8rem;
@@ -11200,7 +11259,7 @@ body {
 }
 .contact-section .card hr {
   opacity: 1;
-  border-color: #64a19d;
+  border-color: var(--border-color);
   border-width: 0.25rem;
   width: 3rem;
 }
@@ -11211,13 +11270,13 @@ body {
   text-align: center;
   height: 3rem;
   width: 3rem;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--social-bg);
   border-radius: 100%;
   line-height: 3rem;
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--social-color);
 }
 .contact-section .social a:hover {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--social-hover);
 }
 .contact-section .social a:active {
   color: #fff;
@@ -11225,7 +11284,28 @@ body {
 
 .footer {
   padding: 5rem 0;
+  background-color: var(--bg-body);
+  color: var(--text-primary);
 }
+
+.footer-text {
+  color: var(--text-primary);
+}
+
+/* Adaptive text class - black in light mode, light in dark mode */
+.adaptive-text {
+  color: var(--text-primary);
+}
+
+.adaptive-text-50 {
+  color: var(--text-primary);
+}
+
+/* Adaptive text class for Index.ejs - Light in light mode, light in dark mode */
+.adaptive-text-index {
+  color: var(--text-primary-index);
+}
+
 
 .hover-line:hover hr{
   transform: scaleX(5);
@@ -11264,7 +11344,7 @@ body {
 .bg-orange { background-color: #fd7e14 !important; } /* Orange */
 .bg-teal { background-color: #20c997 !important; }  /* Teal */
 .bg-purple { background-color: #6f42c1 !important; } /* Purple */
-.bg-gray { background-color: rgb(240,240,240) !important; } /* Purple */
+.bg-gray { background-color: rgb(240,240,240) !important; }
 .bg-darkgray {background-color: #2c3034 !important;}
 
 /* Optional: Enhance hover effect to be more consistent */
@@ -11326,6 +11406,13 @@ body {
     backdrop-filter: blur(10px);
 }
 
+@media (prefers-color-scheme: dark) {
+  .language-toggle {
+    background: rgba(44, 48, 52, 0.9);
+    color: var(--text-primary);
+  }
+}
+
 .language-toggle:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
@@ -11346,4 +11433,15 @@ body {
         padding: 6px 12px;
         font-size: 12px;
     }
+}
+
+body {
+  background-color: var(--bg-body) !important;
+}
+
+.link-light-new {
+  color: #f8f9fa !important;
+}
+.link-light-new:hover, .link-light-new:focus {
+  color: #f9fafb !important;
 }
