@@ -11,94 +11,6 @@
   <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,800,900" rel="stylesheet" />
   <link href="/css/styles.css" rel="stylesheet" />
-  <style>
-/* lightweight card tweaks — main styling comes from /css/styles.css */
-.article-card { max-width: 900px; margin: 3rem auto; }
-
-.card-content { 
-  padding: 2rem; 
-  background: #f5f5f5ec; /* slightly softer than pure white */
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
-  border-radius: 8px; 
-  -webkit-box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-  -moz-box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.06); 
-}
-
-@media (prefers-color-scheme: dark) {
-  .card-content {
-    background: #1e1e1e; /* slightly lighter than before for contrast with page */
-    color: #e0e0e0;
-    -webkit-box-shadow: 0 6px 18px rgba(0,0,0,0.2);
-    -moz-box-shadow: 0 6px 18px rgba(0,0,0,0.2);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.2);
-  }
-}
-
-.lead-meta { color: #6c757d; }
-
-@media (prefers-color-scheme: dark) {
-  .lead-meta { color: #9ca3af; }
-}
-
-.img-grid { 
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-columns: repeat(auto-fit,minmax(220px,1fr));
-  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.img-grid img { 
-  width: 100%;
-  height: auto;
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
-  border-radius: 6px;
-  -webkit-box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-  -moz-box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-}
-
-.placeholder { 
-  background: #e9ecef; 
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-align-items: center;
-  -ms-flex-align: center;
-  align-items: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  height: 220px;
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
-  border-radius: 6px;
-  color: #6c757d;
-  font-weight: 600; 
-  text-align: center; 
-  padding: 1rem; 
-}
-
-@media (prefers-color-scheme: dark) {
-  .placeholder {
-    background: #2d2d2d;
-    color: #9ca3af;
-  }
-}
-
-.section-title { font-weight: 700; margin-top: 1.25rem }
-ul.bullets { margin-left: 1rem }
-figure.featured { margin: 0 0 1.5rem 0; text-align: center; }
-figcaption { font-size: .9rem; color: #6c757d; margin-top: .5rem }
-
-@media (prefers-color-scheme: dark) {
-  figcaption { color: #9ca3af; }
-}
-  </style>
 </head>
 <body>
   <%- include('../partials/navbar') %>
@@ -113,20 +25,24 @@ figcaption { font-size: .9rem; color: #6c757d; margin-top: .5rem }
       </section>
 
       <figure class="featured" aria-hidden="false">
-        <div class="placeholder" role="img" aria-label="Featured image placeholder — Erasmus seminar">Featured image placeholder — Erasmus seminar</div>
-        <figcaption>Featured image placeholder — replace with photo and credit</figcaption>
+        <img src="../assets/img/stem/projects_24-25.jpg" alt="Erasmus seminar at PPMG Vratsa" class="img-fluid rounded shadow" />
+        <figcaption>Erasmus+ dissemination seminar — PPMG "Acad. Ivan Tsenov" Vratsa</figcaption>
       </figure>
 
       <section>
         <p>As part of the ongoing Erasmus+ projects implemented at PPMG "Acad. Ivan Tsenov" — Vratsa, the school's Erasmus Team organized a dissemination seminar for teachers from schools across the Vratsa region. The event showcased the results and experience gained during the current projects and aimed to share practical outcomes with local educators.</p>
 
         <div class="img-grid" aria-hidden="false">
-          <div class="placeholder" role="img" aria-label="Placeholder — presentations and teacher workshop">Placeholder — presentations & workshop</div>
-          <div class="placeholder" role="img" aria-label="Placeholder — project materials">Placeholder — project materials</div>
-          <div class="placeholder" role="img" aria-label="Placeholder — group photo">Placeholder — group photo</div>
+          <img src="../assets/img/stem/projects_24-25_3.jpg" alt="Project materials" class="img-fluid rounded shadow mb-3" />
         </div>
 
         <p>During the seminar, the Erasmus Team — represented by teachers Kalina Nikolova, Pepa Pavlova, Veselka Vylova, Ani Pavlova and Ilonka Vutova — presented teaching materials and project outputs developed by teachers and students who participated in mobilities during the 2024–25 school year. The presentations included practical demonstrations and examples of classroom application.</p>
+
+        <img src="../assets/img/stem/projects_24-25_2.jpg" alt="Presentations and teacher workshop" class="img-fluid rounded shadow mb-3" />
+
+        <p>The seminar provided an opportunity for local teachers to learn about innovative teaching methods, STEM activities, and interdisciplinary approaches promoted by the Erasmus+ projects. The event fostered collaboration and exchange of ideas among educators in the region.</p>
+        
+        <img src="../assets/img/stem/projects_24-25_4.jpg" alt="Group photo" class="img-fluid rounded shadow mb-3" />
 
         <p>The team also shared useful ICT tools incorporating artificial intelligence that were learned during professional development courses and demonstrated how these tools can be integrated into the everyday professional work of teaching staff. The dissemination meeting was well received and generated significant interest from the visiting teachers.</p>
 
@@ -142,7 +58,7 @@ figcaption { font-size: .9rem; color: #6c757d; margin-top: .5rem }
         <p>Participants: teachers from schools in the Vratsa region.</p>
 
         <div class="source">
-          Source: <a href="https://www.facebook.com/PPMG.Vratsa/posts/1234567890" target="_blank">Facebook – PPMG "Acad. Ivan Tsenov" Vratsa</a>
+          Source: <a href="https://www.facebook.com/pmg.vratsa/posts/pfbid03GbAHrgmEefbHXJnRb6KoC8JQkFK1fy1VrPJrVQ7yGKnY6aTJHxiCUrn8yNGiCLgl" target="_blank">Facebook – PPMG "Acad. Ivan Tsenov" Vratsa</a>
         </div>
       </section>
 

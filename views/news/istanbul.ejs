@@ -11,16 +11,6 @@
   <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,800,900" rel="stylesheet" />
   <link href="/css/styles.css" rel="stylesheet" />
-  <style>
-    /* lightweight card tweaks — main styling comes from /css/styles.css */
-    .article-card { max-width: 900px; margin: 3rem auto; }
-    .card-content { padding: 2rem; background: #fff; border-radius: 8px; box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
-    .lead-meta { color: #6c757d; font-size: .95rem; }
-    .img-grid img { width:100%; height:auto; border-radius:6px; box-shadow:0 4px 12px rgba(0,0,0,0.06); }
-    .placeholder { background:#e9ecef; display:flex;align-items:center;justify-content:center;height:260px;border-radius:6px;color:#6c757d }
-    .section-title { font-weight:700; margin-top:1.25rem }
-    ul.bullets { margin-left:1rem }
-  </style>
 </head>
 <body>
 
@@ -35,18 +25,32 @@
         <p class="lead-meta">Specialized High School of Natural Sciences and Mathematics "Academician Ivan Tsenov" Vratsa · June 27, 2025 · 2 hours ago · Sponsored</p>
       </section>
 
+      <!-- Replace the first placeholder with istanbul1.jpg -->
       <div class="img-grid mb-4">
-        <div class="placeholder">Image placeholder — group / school</div>
+        <img src="/assets/img/stem/istanbul-1.jpg" alt="Group photo at Istanbul school" class="img-fluid">
       </div>
 
       <section>
         <p>Within the framework of project №2024-1-BG01-KA121-SCH-000202833 under Erasmus Accreditation for School Education, a group of 15 students from PPMG "Acad. Ivan Tsenov", Vratsa participated in mobility in Istanbul, Turkey. For several unforgettable days from May 19 to 23, 2025, the students visited three partner schools, where together with their Turkish peers they participated in joint lessons in chemistry and physics with interactive activities.</p>
 
-        <div class="placeholder mb-3">Image placeholder — лабораторна работа / уроци</div>
-
+      <!-- Replace second placeholder with istanbul2.jpg -->
+      <div class="img-grid mb-3">
+        <img src="/assets/img/stem/istanbul-2.jpg" alt="Laboratory work and lessons" class="img-fluid">
+      </div>
+        <h2 class="section-title">Chemistry experiments and lessons</h2>
+        <p>The chemistry lessons were held at the "Istanbul Science High School" and "Istanbul Atatürk Anatolian High School". The students conducted experiments and practical work on topics such as:</p>
+        <ul class="bullets">
+          <li>Separation of mixtures</li>
+          <li>Preparation of solutions</li>
+          <li>Acid-base reactions and pH indicators</li>
+          <li>Chemical kinetics and reaction rates</li>
+          
         <p>Among the most interesting moments was the practical work on creating a perfume, based on a preliminary analysis of the formula for percentage content and ratio of ingredients. The students also explored the properties of acids and bases through a creative presentation in poetic form. The experiment called "Volcano" was also impressive — by igniting a mixture of chemical substances, the effect of an erupting volcano is obtained.</p>
 
-        <div class="placeholder mb-3">Image placeholder — експеримент 'Вулкан'</div>
+        <!-- Replace third placeholder with istanbul3.jpg -->
+        <div class="img-grid mb-3">
+          <img src="/assets/img/stem/istanbul-3.jpg" alt="Volcano experiment" class="img-fluid">
+        </div>
 
         <h2 class="section-title">Physics projects by partner schools</h2>
         <p>The Turkish students presented an exhibition of physics projects, including:</p>
@@ -57,9 +61,27 @@
           <li>A project for generating electrical energy from mechanical energy</li>
         </ul>
 
+        <!-- Add two images for museums section -->
+        <div class="img-grid mb-3 row">
+          <div class="col-md-6">
+            <img src="/assets/img/stem/istanbul-6.jpg" alt="Science and Technology Museum visit" class="img-fluid mb-3">
+          </div>
+          <div class="col-md-6">
+            <img src="/assets/img/stem/istanbul-7.jpg" alt="Rahmi Koç Museum visit" class="img-fluid mb-3">
+          </div>
+        </div>
+
         <p>The program also included official presentations by the partner schools, as well as a musical greeting from the school choir, which contributed to the warm welcome and friendly atmosphere.</p>
 
-        <div class="placeholder mb-3">Image placeholder — изложба / хор</div>
+        <!-- Add two new images in a row after physics projects section -->
+        <div class="img-grid mb-3 row">
+          <div class="col-md-6">
+            <img src="/assets/img/stem/istanbul-4.jpg" alt="Physics projects exhibition" class="img-fluid mb-3">
+          </div>
+          <div class="col-md-6">
+            <img src="/assets/img/stem/istanbul-5.jpg" alt="School choir performance" class="img-fluid mb-3">
+          </div>
+        </div>
 
         <h2 class="section-title">Visits to museums</h2>
         <p>The educational visit continued with visits to two emblematic museums:</p>
@@ -84,18 +106,19 @@
 
         <p>This mobility has become an unforgettable experience, filled with new knowledge, practical experience and valuable international friendships. We thank all participants, organizers and partner schools for the inspiring cooperation!</p>
 
-        <div class="placeholder mb-3">Image placeholder — групова снимка край музея</div>
+        <!-- Replace placeholder with istanbul8.jpg -->
+        <div class="img-grid mb-3">
+          <img src="../assets/img/stem/istanbul-8.jpg" alt="Group photo at museum" class="img-fluid">
+        </div>
 
         <div class="source">
-          Source: <a href="https://www.facebook.com/PPMG.Vratsa/posts/1234567890" target="_blank">Facebook – PPMG "Acad. Ivan Tsenov" Vratsa</a>
+          Source: <a href="https://www.facebook.com/share/p/1JEQJKiaLo/" target="_blank">Facebook – PPMG "Acad. Ivan Tsenov" Vratsa</a>
         </div>
 
       </section>
-
     </main>
   </div>
-  </div>
-
+</div>
   <!-- Footer -->
   <%- include('../partials/footer') %>
 
@@ -105,3 +128,13 @@
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+

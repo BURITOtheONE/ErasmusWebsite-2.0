@@ -11445,3 +11445,12 @@ body {
 .link-light-new:hover, .link-light-new:focus {
   color: #f9fafb !important;
 }
+
+    /* lightweight card tweaks — main styling comes from /css/styles.css */
+    .article-card { max-width: 900px; margin: 3rem auto; }
+    .lead-meta { color: #6c757d; font-size: .95rem; }
+    .img-grid img { width:100%; height:auto; border-radius:6px; box-shadow:0 4px 12px rgba(0,0,0,0.06); }
+    .section-title { font-weight:700; margin-top:1.25rem }
+    ul.bullets { margin-left:1rem }
+    .card-content { padding: 2rem; background: var(--card-bg); border-radius: 8px; box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
+    .placeholder { background:#e9ecef; display:flex;align-items:center;justify-content:center;height:260px;border-radius:6px;color:#6c757d }
